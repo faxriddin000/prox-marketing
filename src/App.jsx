@@ -71,6 +71,7 @@ const AppContent = () => {
       <Header
         currentView={currentView}
         onViewChange={handleViewChange}
+        onSelectCategory={handleSelectServiceCategory}
         onOpenConsultation={() => handleOpenConsultation('Konsultatsiya')}
         onOpenAdminLogin={() => setAdminLoginModalOpen(true)}
       />
