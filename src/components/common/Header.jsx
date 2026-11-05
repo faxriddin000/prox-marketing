@@ -1,0 +1,228 @@
+import React, { useState, useEffect } from 'react';
+import { Menu, X, ArrowUpRight, Shield, Globe2, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { useCMS } from '../../context/CMSContext';
+import { useAuth } from '../../context/AuthContext';
+
+export const Header = ({ currentView, onViewChange, onOpenConsultation, onOpenAdminLogin }) => {
+  const { language, setLanguage, t } = useLanguage();
+  const { data } = useCMS();
+  const { isAuthenticated, currentUser } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { id: 'home', label: t('nav_home') },
+    { id: 'about', label: t('nav_about') },
+    { id: 'services', label: t('nav_services') },
+    { id: 'tariffs', label: t('nav_tariffs') },
+    { id: 'partners', label: t('nav_partners') },
+    ...(data.portfolio?.showInNav ? [{ id: 'portfolio', label: t('nav_portfolio') }] : []),
+    { id: 'contact', label: t('nav_contact') },
+  ];
+
+  const handleNavClick = (viewId) => {
+    onViewChange(viewId);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        scrolled
+          ? 'bg-slate-950/85 backdrop-blur-md border-b border-slate-800/80 shadow-lg py-3'
+          : 'bg-transparent py-5'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <div
+            onClick={() => handleNavClick('home')}
+            className="flex items-center gap-3 cursor-pointer group"
+          >
+            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-cyan-300 text-lg tracking-wider">
+                  PX
+                </span>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white group-hover:text-indigo-300 transition-colors">
+                  PROX
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  Agency
+                </span>
+              </div>
+              <span className="block text-[10px] text-slate-400 tracking-wider font-mono">
+                proxmarketing.uz
+              </span>
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md shadow-inner">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                  currentView === item.id
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Right Action Bar */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* Language Switcher */}
+            <div className="flex items-center bg-slate-900/80 rounded-xl p-1 border border-slate-800 text-xs font-medium">
+              <button
+                onClick={() => setLanguage('uz')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  language === 'uz'
+                    ? 'bg-indigo-600 text-white font-bold shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                UZ
+              </button>
+              <button
+                onClick={() => setLanguage('ru')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  language === 'ru'
+                    ? 'bg-indigo-600 text-white font-bold shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                RU
+              </button>
+            </div>
+
+            {/* Admin shortcut */}
+            <button
+              onClick={() => {
+                if (isAuthenticated) {
+                  onViewChange('admin');
+                } else {
+                  onOpenAdminLogin();
+                }
+              }}
+              title="Admin Panel"
+              className={`p-2 rounded-xl text-xs font-medium border flex items-center gap-1.5 transition-all cursor-pointer ${
+                currentView === 'admin'
+                  ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 ring-1 ring-indigo-500/30'
+                  : 'bg-slate-900/80 text-slate-400 hover:text-white border-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="hidden xl:inline">
+                {isAuthenticated ? (currentUser?.role === 'admin' ? 'Admin' : 'Editor') : 'Admin'}
+              </span>
+            </button>
+
+            {/* Consultation CTA */}
+            <button
+              onClick={onOpenConsultation}
+              className="relative inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-semibold text-xs tracking-wide shadow-md shadow-indigo-600/25 active:scale-95 transition-all cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{t('nav_cta')}</span>
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center gap-2">
+            <div className="flex items-center bg-slate-900/80 rounded-lg p-0.5 border border-slate-800 text-xs">
+              <button
+                onClick={() => setLanguage('uz')}
+                className={`px-2 py-1 rounded text-[11px] ${
+                  language === 'uz' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400'
+                }`}
+              >
+                UZ
+              </button>
+              <button
+                onClick={() => setLanguage('ru')}
+                className={`px-2 py-1 rounded text-[11px] ${
+                  language === 'ru' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400'
+                }`}
+              >
+                RU
+              </button>
+            </div>
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-xl bg-slate-900 text-slate-300 hover:text-white border border-slate-800"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-slate-950/95 border-b border-slate-800 px-4 pt-3 pb-6 space-y-2 backdrop-blur-xl animate-fadeIn">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                currentView === item.id
+                  ? 'bg-indigo-600 text-white font-semibold'
+                  : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+
+          <div className="pt-3 border-t border-slate-800/80 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                if (isAuthenticated) {
+                  onViewChange('admin');
+                } else {
+                  onOpenAdminLogin();
+                }
+                setMobileMenuOpen(false);
+              }}
+              className="w-full py-2.5 px-4 rounded-xl text-sm font-medium bg-slate-900 text-indigo-300 border border-indigo-500/30 flex items-center justify-center gap-2"
+            >
+              <Shield className="w-4 h-4 text-indigo-400" />
+              <span>Admin Panel {isAuthenticated ? `(${currentUser?.role})` : ''}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenConsultation();
+              }}
+              className="w-full py-3 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-cyan-500 text-center shadow-lg shadow-indigo-600/30"
+            >
+              {t('hero_consult_btn')}
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
