@@ -741,7 +741,7 @@ export const AdminDashboard = ({ onBackToSite }) => {
                         <input
                           type="text"
                           disabled={!canEditPricing}
-                          value={item.savingsUz}
+                          value={item.savingsUz || ''}
                           onChange={(e) => {
                             const updated = [...smmPricing];
                             updated[idx] = { ...updated[idx], savingsUz: e.target.value };

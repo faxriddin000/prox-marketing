@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Share2, TrendingUp, Code2, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, Share2, Code2, Check, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
@@ -10,45 +10,31 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
   const previewCards = [
     {
       id: 'smm',
-      title: 'SMM Xizmatlari',
-      badge: '6 ta xizmat',
+      number: '01',
+      title: language === 'ru' ? 'SMM Услуги' : 'SMM Xizmatlari',
+      badge: language === 'ru' ? '6 услуг' : '6 ta xizmat',
       icon: Share2,
-      color: 'from-pink-500/20 to-rose-500/10 text-pink-400 border-pink-500/30',
-      btnColor: 'hover:border-pink-500/50 hover:text-pink-300',
-      desc: language === 'ru'
-        ? 'Комплексное ведение социальных сетей, вирусный контент, точный таргет и формирование устойчивого имиджа бренда.'
-        : 'Ijtimoiy tarmoqlarda professional strategiya, sifatli video/storislar, target reklama va brend obro\'sini mustahkamlash.',
-      features: language === 'ru'
-        ? ['Разработка стратегии', 'Контент и моушн-дизайн', 'Таргетинг в Instagram & Facebook']
-        : ['Strategiya ishlab chiqish', 'Kontent va kreativ dizayn', 'Instagram & FB target reklama']
-    },
-    {
-      id: 'marketing',
-      title: 'Keng qamrovli Marketing',
-      badge: '7 ta yo\'nalish',
-      icon: TrendingUp,
-      color: 'from-indigo-500/20 to-purple-500/10 text-indigo-400 border-indigo-500/30',
-      btnColor: 'hover:border-indigo-500/50 hover:text-indigo-300',
-      desc: language === 'ru'
-        ? 'Полный маркетинговый аутсорсинг: брендинг, работа с блогерами, реклама в Google/Telegram и аудит отдела продаж.'
-        : 'To\'liq marketing autsorsingi: brending, blogerlar bilan ishlash, Google & Telegram Ads hamda sotuv bo\'limi nazorati.',
-      features: language === 'ru'
-        ? ['Все предложения SMM', 'Google Ads & Telegram Ads', 'Контроль отдела продаж']
-        : ['SMM dagi barcha takliflar', 'Google Ads & Telegram Ads', 'Sotuv bo\'limi nazorati']
+      borderGlow: 'hover:border-pink-500/60 hover:shadow-pink-500/10',
+      badgeColor: 'bg-pink-500/10 text-pink-400 border-pink-500/20',
+      iconColor: 'bg-gradient-to-br from-pink-500/20 to-rose-500/10 text-pink-400 border-pink-500/30',
+      btnHover: 'hover:bg-pink-600 hover:border-pink-500',
+      features: (data.services?.smm || []).slice(0, 4).map((item) =>
+        item[`title${language.charAt(0).toUpperCase() + language.slice(1)}`] || item.titleUz
+      )
     },
     {
       id: 'it',
-      title: 'IT Yechimlari & Dasturlash',
-      badge: '6 ta yo\'nalish',
+      number: '02',
+      title: language === 'ru' ? 'IT Услуги' : 'IT Xizmatlari',
+      badge: language === 'ru' ? '6 услуг' : '6 ta xizmat',
       icon: Code2,
-      color: 'from-cyan-500/20 to-blue-500/10 text-cyan-400 border-cyan-500/30',
-      btnColor: 'hover:border-cyan-500/50 hover:text-cyan-300',
-      desc: language === 'ru'
-        ? 'Разработка современных веб-сайтов, мобильных приложений, интеграция платежных систем и создание умных AI ботов.'
-        : 'Landing page, korporativ saytlar, mobil ilovalar, zamonaviy to\'lov tizimlari va sun\'iy intellekt botlari yaratish.',
-      features: language === 'ru'
-        ? ['Веб-сайты и мобильные приложения', 'Payme/Click интеграции', 'Telegram и AI чат-боты']
-        : ['Veb-sayt va mobil ilovalar', 'To\'lov tizimlari integratsiyasi', 'Sun\'iy intellekt va botlar']
+      borderGlow: 'hover:border-cyan-500/60 hover:shadow-cyan-500/10',
+      badgeColor: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+      iconColor: 'bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-400 border-cyan-500/30',
+      btnHover: 'hover:bg-cyan-600 hover:border-cyan-500',
+      features: (data.services?.it || []).slice(0, 4).map((item) =>
+        item[`title${language.charAt(0).toUpperCase() + language.slice(1)}`] || item.titleUz
+      )
     }
   ];
 
@@ -61,8 +47,11 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
   };
 
   return (
-    <section className="py-20 bg-slate-950/50 relative border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-slate-950/60 relative border-t border-slate-900 overflow-hidden">
+      {/* Decorative background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
             <Sparkles className="w-3.5 h-3.5" />
@@ -76,37 +65,39 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 2 Clean Flagship Cards Redesigned */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {previewCards.map((card) => {
             const Icon = card.icon;
             return (
               <div
                 key={card.id}
-                className="group relative rounded-2xl bg-slate-900/70 border border-slate-800 hover:border-slate-700 p-7 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
+                className={`group relative rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950/95 border border-slate-800 p-8 flex flex-col justify-between transition-all duration-300 shadow-xl hover:-translate-y-1.5 hover:shadow-2xl ${card.borderGlow}`}
               >
                 <div>
-                  {/* Top line with Icon and Badge */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} border flex items-center justify-center`}>
-                      <Icon className="w-6 h-6" />
+                  {/* Top Bar with Numbered Badge & Elevated Icon */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-14 h-14 rounded-2xl ${card.iconColor} border flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className="w-7 h-7" />
+                      </div>
+                      <span className="text-2xl font-black font-mono text-slate-700 select-none">
+                        {card.number}
+                      </span>
                     </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold border ${card.badgeColor}`}>
                       {card.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">
+                  <h3 className="text-2xl font-extrabold text-white mb-4 group-hover:text-indigo-300 transition-colors">
                     {card.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
-                    {card.desc}
-                  </p>
-
-                  {/* Highlights list */}
-                  <ul className="space-y-2.5 mb-8">
+                  {/* Authentic TZ Features List */}
+                  <ul className="space-y-3 mb-8">
                     {card.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-center gap-2 text-xs text-slate-300">
+                      <li key={fIdx} className="flex items-center gap-3 text-xs sm:text-sm text-slate-300">
                         <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                         <span>{feat}</span>
                       </li>
@@ -116,7 +107,7 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
 
                 <button
                   onClick={() => handleDetailsClick(card.id)}
-                  className={`w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-200 bg-slate-800/80 hover:bg-slate-850 border border-slate-700/80 flex items-center justify-center gap-2 transition-all cursor-pointer ${card.btnColor}`}
+                  className={`w-full py-3.5 px-5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-slate-800/90 border border-slate-700/80 flex items-center justify-center gap-2 transition-all cursor-pointer ${card.btnHover}`}
                 >
                   <span>{t('services_btn_details')}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -124,6 +115,21 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
               </div>
             );
           })}
+        </div>
+
+        {/* View All Services Link */}
+        <div className="mt-12 text-center">
+          <button
+            onClick={() => {
+              if (onSelectCategory) onSelectCategory('all');
+              onViewChange('services');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer group"
+          >
+            <span>{t('services_view_all_link')}</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
       </div>
     </section>

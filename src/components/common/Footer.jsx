@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Send, ArrowUpRight, ShieldCheck, Mail, MapPin } from 'lucide-react';
+import { Phone, Send, ShieldCheck, MapPin } from 'lucide-react';
 import { InstagramIcon } from './Icons';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
@@ -34,20 +34,20 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
             </p>
 
             <div className="pt-2 flex items-center gap-2">
-              <span className="text-xs text-slate-500">Til / Язык:</span>
+              <span className="text-xs text-slate-400 font-medium">{t('footer_lang_label')}</span>
               <div className="flex bg-slate-900 rounded-lg p-0.5 border border-slate-800 text-xs">
                 <button
                   onClick={() => setLanguage('uz')}
-                  className={`px-2 py-0.5 rounded text-[11px] ${
-                    language === 'uz' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400'
+                  className={`px-2 py-0.5 rounded text-[11px] cursor-pointer ${
+                    language === 'uz' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   UZ
                 </button>
                 <button
                   onClick={() => setLanguage('ru')}
-                  className={`px-2 py-0.5 rounded text-[11px] ${
-                    language === 'ru' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400'
+                  className={`px-2 py-0.5 rounded text-[11px] cursor-pointer ${
+                    language === 'ru' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   RU
@@ -65,7 +65,7 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
               <li>
                 <button
                   onClick={() => onViewChange('home')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   {t('nav_home')}
                 </button>
@@ -73,7 +73,7 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
               <li>
                 <button
                   onClick={() => onViewChange('about')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   {t('nav_about')}
                 </button>
@@ -81,7 +81,7 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
               <li>
                 <button
                   onClick={() => onViewChange('services')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   {t('nav_services')}
                 </button>
@@ -89,7 +89,7 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
               <li>
                 <button
                   onClick={() => onViewChange('tariffs')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   {t('nav_tariffs')}
                 </button>
@@ -97,7 +97,7 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
               <li>
                 <button
                   onClick={() => onViewChange('partners')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
                   {t('nav_partners')}
                 </button>
@@ -106,7 +106,7 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
                 <li>
                   <button
                     onClick={() => onViewChange('portfolio')}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white transition-colors cursor-pointer"
                   >
                     {t('nav_portfolio')}
                   </button>
@@ -124,39 +124,39 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
               <li>
                 <button
                   onClick={() => onViewChange('services')}
-                  className="hover:text-white transition-colors text-left"
+                  className="hover:text-white transition-colors text-left cursor-pointer"
                 >
-                  {t('services_tab_smm')} (6 ta xizmat)
+                  {t('services_tab_smm')} {t('footer_smm_count')}
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onViewChange('services')}
-                  className="hover:text-white transition-colors text-left"
+                  className="hover:text-white transition-colors text-left cursor-pointer"
                 >
-                  {t('services_tab_mkt')} (7 ta yo'nalish)
+                  {t('services_tab_mkt')} {t('footer_mkt_count')}
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onViewChange('services')}
-                  className="hover:text-white transition-colors text-left"
+                  className="hover:text-white transition-colors text-left cursor-pointer"
                 >
-                  {t('services_tab_it')} (6 ta yo'nalish)
+                  {t('services_tab_it')} {t('footer_it_count')}
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onViewChange('tariffs')}
-                  className="hover:text-white transition-colors text-left text-indigo-400 font-medium"
+                  className="hover:text-white transition-colors text-left text-indigo-400 font-semibold cursor-pointer"
                 >
-                  Barcha paketlar va tariflar &rarr;
+                  {t('footer_tariffs_link')}
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Official Contacts */}
+          {/* Official Contacts: Pure Solid White Icons AND Text */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               {t('footer_contacts')}
@@ -164,39 +164,39 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
             <ul className="space-y-2.5 text-xs">
               <li>
                 <a
-                  href={`tel:${data.contact.phoneClean || '+998200260418'}`}
-                  className="flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition-colors"
+                  href={`tel:${data.contact?.phoneClean || '+998200260418'}`}
+                  className="flex items-center gap-2.5 text-white hover:text-slate-300 transition-colors group"
                 >
-                  <Phone className="w-4 h-4 text-indigo-400" />
-                  <span className="font-semibold">{data.contact.phone || '+998 20 026 04 18'}</span>
+                  <Phone className="w-4 h-4 text-white" />
+                  <span className="font-bold text-white tracking-wide">{data.contact?.phone || '+998 20 026 04 18'}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={data.contact.telegramUrl || 'https://t.me/manager_prox'}
+                  href={data.contact?.telegramUrl || 'https://t.me/manager_prox'}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 text-slate-300 hover:text-sky-400 transition-colors"
+                  className="flex items-center gap-2.5 text-white hover:text-slate-300 transition-colors group"
                 >
-                  <Send className="w-4 h-4 text-sky-400" />
-                  <span>{data.contact.telegram || '@manager_prox'}</span>
+                  <Send className="w-4 h-4 text-white" />
+                  <span className="font-bold text-white">{data.contact?.telegram || '@manager_prox'}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={data.contact.instagramUrl || 'https://instagram.com/prox_uz'}
+                  href={data.contact?.instagramUrl || 'https://instagram.com/prox_uz'}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 text-slate-300 hover:text-pink-400 transition-colors"
+                  className="flex items-center gap-2.5 text-white hover:text-slate-300 transition-colors group"
                 >
-                  <InstagramIcon className="w-4 h-4 text-pink-400" />
-                  <span>{data.contact.instagram || '@prox_uz'}</span>
+                  <InstagramIcon className="w-4 h-4 text-white" />
+                  <span className="font-bold text-white">{data.contact?.instagram || '@prox_uz'}</span>
                 </a>
               </li>
-              {data.contact.address && (
-                <li className="flex items-start gap-2 text-slate-400">
-                  <MapPin className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
-                  <span>{data.contact.address}</span>
+              {data.contact?.address && (
+                <li className="flex items-start gap-2.5 text-white">
+                  <MapPin className="w-4 h-4 text-white mt-0.5 shrink-0" />
+                  <span className="text-white">{data.contact.address}</span>
                 </li>
               )}
             </ul>
@@ -207,16 +207,16 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <p>© {new Date().getFullYear()} Prox Marketing Agency. {t('footer_rights')}</p>
           <div className="flex items-center gap-4">
-            <span className="text-slate-500 font-mono text-[11px]">
+            <span className="text-slate-400 font-mono text-[11px]">
               {t('footer_planned_domain')}
             </span>
             <span className="text-slate-700">|</span>
             <button
               onClick={onOpenAdminLogin}
-              className="text-slate-500 hover:text-indigo-400 transition-colors flex items-center gap-1"
+              className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-1 cursor-pointer"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Admin Kirish</span>
+              <span>{t('footer_admin_link')}</span>
             </button>
           </div>
         </div>

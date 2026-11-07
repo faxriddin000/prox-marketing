@@ -3,28 +3,33 @@ import { X, Send, CheckCircle2, Phone, User, Briefcase, MessageSquare, ExternalL
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
-import { Captcha } from './Captcha';
 
 export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
   const { t, language } = useLanguage();
   const { addLead, data } = useCMS();
 
+  // Clean initial service if it was a prefixed string
+  const getCleanService = (srv) => {
+    if (!srv) return 'Marketing';
+    if (srv.toLowerCase().includes('smm')) return 'SMM';
+    if (srv.toLowerCase().includes('it')) return 'IT';
+    return 'Marketing';
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '+998 ',
-    service: initialService || 'Marketing',
+    service: getCleanService(initialService),
     comment: ''
   });
 
-  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-  const [captchaResetTrigger, setCaptchaResetTrigger] = useState(0);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (initialService) {
-      setFormData((prev) => ({ ...prev, service: initialService }));
+      setFormData((prev) => ({ ...prev, service: getCleanService(initialService) }));
     }
   }, [initialService]);
 
@@ -32,8 +37,6 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
     if (isOpen) {
       setIsSuccess(false);
       setErrors({});
-      setIsCaptchaVerified(false);
-      setCaptchaResetTrigger((prev) => prev + 1);
     }
   }, [isOpen]);
 
@@ -56,10 +59,6 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
       newErrors.phone = t('form_error_phone');
     }
 
-    if (!isCaptchaVerified) {
-      newErrors.captcha = t('form_error_captcha');
-    }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -69,27 +68,24 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
     try {
       await addLead(formData);
 
-      // Trigger celebration confetti
       try {
         confetti({
           particleCount: 80,
           spread: 70,
           origin: { y: 0.6 }
         });
-      } catch {
-        // fallback if canvas-confetti is not loaded
-      }
+      } catch {}
 
       setIsSuccess(true);
       setFormData({
         name: '',
         phone: '+998 ',
-        service: initialService || 'Marketing',
+        service: getCleanService(initialService),
         comment: ''
       });
     } catch (err) {
       console.error(err);
-      alert('Xatolik yuz berdi. Iltimos qaytadan urinib ko\'ring.');
+      alert(language === 'ru' ? 'Произошла ошибка. Пожалуйста, попробуйте еще раз.' : 'Xatolik yuz berdi. Iltimos qaytadan urinib ko\'ring.');
     } finally {
       setIsSubmitting(false);
     }
@@ -98,7 +94,7 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
       <div
-        className="relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-hidden"
+        className="relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Glow decoration */}
@@ -108,7 +104,7 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 p-2 rounded-xl transition-colors"
+          className="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 p-2 rounded-xl transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -127,20 +123,20 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
 
             <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href={data.contact.telegramUrl || "https://t.me/manager_prox"}
+                href={data.contact?.telegramUrl || "https://t.me/manager_prox"}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-medium text-sm transition-all shadow-lg shadow-sky-500/25"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-medium text-sm transition-all shadow-lg shadow-sky-500/25 cursor-pointer"
               >
-                <span>Telegramda yozish</span>
+                <span>Telegram: @manager_prox</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-all"
+                className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-all cursor-pointer"
               >
-                Yopish
+                {language === 'ru' ? 'Закрыть' : 'Yopish'}
               </button>
             </div>
           </div>
@@ -159,7 +155,7 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name */}
+              {/* Field 1: Ism */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <User className="w-3.5 h-3.5 text-indigo-400" />
@@ -176,7 +172,7 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
                 {errors.name && <p className="text-xs text-rose-400 mt-1">{errors.name}</p>}
               </div>
 
-              {/* Phone */}
+              {/* Field 2: Telefon */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <Phone className="w-3.5 h-3.5 text-indigo-400" />
@@ -193,7 +189,7 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
                 {errors.phone && <p className="text-xs text-rose-400 mt-1">{errors.phone}</p>}
               </div>
 
-              {/* Service Select */}
+              {/* Field 3: Xizmat turi (Dropdown options strictly: SMM, Marketing, IT) */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
@@ -202,15 +198,15 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
                 <select
                   value={formData.service}
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                  className="w-full bg-slate-950/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                  className="w-full bg-slate-950/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer"
                 >
-                  <option value="SMM">{t('form_service_smm')} (SMM)</option>
-                  <option value="Marketing">{t('form_service_marketing')} (Marketing)</option>
-                  <option value="IT">{t('form_service_it')} (IT xizmatlari)</option>
+                  <option value="SMM">{t('form_service_smm')}</option>
+                  <option value="Marketing">{t('form_service_marketing')}</option>
+                  <option value="IT">{t('form_service_it')}</option>
                 </select>
               </div>
 
-              {/* Comment */}
+              {/* Field 4: Izoh / Xabar (Optional) */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
@@ -225,19 +221,11 @@ export const LeadModal = ({ isOpen, onClose, initialService = '' }) => {
                 />
               </div>
 
-              {/* Captcha */}
-              <Captcha
-                onVerify={setIsCaptchaVerified}
-                isVerified={isCaptchaVerified}
-                resetTrigger={captchaResetTrigger}
-              />
-              {errors.captcha && <p className="text-xs text-rose-400">{errors.captcha}</p>}
-
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 active:scale-[0.99] transition-all shadow-lg shadow-indigo-500/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full mt-3 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 active:scale-[0.99] transition-all shadow-lg shadow-indigo-500/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? (
                   <span>{t('form_submitting')}</span>

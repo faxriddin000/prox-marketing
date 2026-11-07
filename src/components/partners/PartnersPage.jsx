@@ -1,5 +1,5 @@
 import React from 'react';
-import { Handshake, Building2, CheckCircle2, ArrowRight, ShieldCheck, Star } from 'lucide-react';
+import { Handshake, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
@@ -7,6 +7,7 @@ export const PartnersPage = ({ onOpenConsultation }) => {
   const { language, t } = useLanguage();
   const { data } = useCMS();
   const partners = data.partners || [];
+  const marqueePartners = [...partners, ...partners];
 
   return (
     <div className="pt-32 pb-24 space-y-20">
@@ -24,50 +25,40 @@ export const PartnersPage = ({ onOpenConsultation }) => {
         </p>
       </section>
 
-      {/* Grid of Partners */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {partners.map((partner) => {
-            const industry =
-              partner[`industry${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
-              partner.industryUz;
+      {/* Infinite Logo Marquee */}
+      <section className="relative w-full overflow-hidden py-8 [mask-image:linear-gradient(to_right,transparent,white_15%,white_85%,transparent)]">
+        <div className="animate-marquee items-center gap-16 sm:gap-24">
+          {marqueePartners.map((partner, index) => (
+            <div
+              key={`${partner.id}-${index}`}
+              className="shrink-0 flex items-center justify-center h-20 bg-transparent border-none shadow-none"
+            >
+              <img
+                src={partner.logo}
+                alt={partner.name}
+                className="max-h-14 sm:max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 filter brightness-110 drop-shadow-md"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
 
-            return (
-              <div
-                key={partner.id}
-                className="bg-slate-900/60 hover:bg-slate-850/80 border border-slate-800 hover:border-slate-700 rounded-3xl p-8 flex flex-col items-center text-center transition-all duration-300 group hover:-translate-y-1 shadow-lg shadow-black/20"
-              >
-                <div className="w-full h-28 bg-slate-950/80 rounded-2xl mb-6 p-4 flex items-center justify-center border border-slate-800/80 group-hover:border-cyan-500/30 transition-colors">
-                  {partner.logo ? (
-                    <img
-                      src={partner.logo}
-                      alt={partner.name}
-                      className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                    />
-                  ) : (
-                    <Building2 className="w-12 h-12 text-slate-600" />
-                  )}
-                </div>
-
-                <h3 className="font-bold text-lg text-white group-hover:text-cyan-300 transition-colors mb-1">
-                  {partner.name}
-                </h3>
-
-                <p className="text-xs font-medium text-slate-400 mb-4">
-                  {industry}
-                </p>
-
-                <div className="flex items-center gap-1 text-amber-400 text-xs">
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <span className="text-[11px] text-slate-400 ml-1">5.0 Hamkorlik</span>
-                </div>
-              </div>
-            );
-          })}
+      {/* Clean Transparent Logo Showcase Grid */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center py-6">
+          {partners.map((partner) => (
+            <div
+              key={partner.id}
+              className="flex items-center justify-center h-20 w-full bg-transparent border-none shadow-none group"
+            >
+              <img
+                src={partner.logo}
+                alt={partner.name}
+                className="max-h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300 filter brightness-110"
+              />
+            </div>
+          ))}
         </div>
       </section>
 
@@ -78,10 +69,14 @@ export const PartnersPage = ({ onOpenConsultation }) => {
             <ShieldCheck className="w-7 h-7" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Sizning brendingiz ham shu ro'yxatda bo'lishini xohlaysizmi?
+            {language === 'ru'
+              ? 'Хотите видеть свой бренд среди наших партнеров?'
+              : "Sizning brendingiz ham shu ro'yxatda bo'lishini xohlaysizmi?"}
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Biz har bir mijozimizning muvaffaqiyatini o'zimizning g'alabamiz deb bilamiz. Keling, sizning biznesingiz uchun ham daromadli strategiya tuzaylik.
+            {language === 'ru'
+              ? 'Мы измеряем наш успех результатами наших клиентов. Давайте создадим прибыльную стратегию для вашего бизнеса.'
+              : "Biz har bir mijozimizning muvaffaqiyatini o'zimizning g'alabamiz deb bilamiz. Keling, sizning biznesingiz uchun ham daromadli strategiya tuzaylik."}
           </p>
           <button
             onClick={() => onOpenConsultation('Hamkorlik')}

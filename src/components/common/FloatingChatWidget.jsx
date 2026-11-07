@@ -4,7 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
 export const FloatingChatWidget = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { data, addLead } = useCMS();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
@@ -15,7 +15,7 @@ export const FloatingChatWidget = () => {
   const handleQuickCallback = async (e) => {
     e.preventDefault();
     if (!name.trim() || phone.replace(/\D/g, '').length < 9) {
-      alert("Iltimos, ism va to'g'ri telefon raqamingizni kiriting.");
+      alert(language === 'ru' ? "Пожалуйста, введите имя и корректный номер телефона." : "Iltimos, ism va to'g'ri telefon raqamingizni kiriting.");
       return;
     }
 
@@ -24,8 +24,8 @@ export const FloatingChatWidget = () => {
       await addLead({
         name,
         phone,
-        service: 'Tezkor Chat / Aloqa',
-        comment: 'Foydalanuvchi online yordamchi vidjeti orqali tezkor qo\'ng\'iroq so\'radi.'
+        service: language === 'ru' ? 'Онлайн-чат / Обратный звонок' : 'Tezkor Chat / Aloqa',
+        comment: language === 'ru' ? 'Заказ обратного звонка из онлайн-виджета.' : 'Foydalanuvchi online yordamchi vidjeti orqali tezkor qo\'ng\'iroq so\'radi.'
       });
       setSubmitted(true);
       setName('');
@@ -37,7 +37,7 @@ export const FloatingChatWidget = () => {
     }
   };
 
-  const telegramLink = data.contact.telegramUrl || 'https://t.me/manager_prox';
+  const telegramLink = data.contact?.telegramUrl || 'https://t.me/manager_prox';
 
   return (
     <div className="fixed bottom-6 right-6 z-40">
@@ -107,7 +107,7 @@ export const FloatingChatWidget = () => {
             <div className="relative flex items-center justify-center">
               <div className="border-t border-slate-800 w-full" />
               <span className="bg-slate-900 px-2 text-[11px] uppercase tracking-wider text-slate-500 absolute">
-                yoki
+                {language === 'ru' ? 'или' : 'yoki'}
               </span>
             </div>
 
@@ -116,17 +116,17 @@ export const FloatingChatWidget = () => {
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 text-center space-y-2">
                 <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
                 <h5 className="font-semibold text-white text-sm">
-                  So'rovingiz qabul qilindi!
+                  {language === 'ru' ? 'Заявка принята!' : "So'rovingiz qabul qilindi!"}
                 </h5>
                 <p className="text-xs text-slate-300">
-                  Mutaxassisimiz 10-15 daqiqa ichida siz bilan bog'lanadi.
+                  {language === 'ru' ? 'Наш специалист свяжется с вами в течение 10-15 минут.' : 'Mutaxassisimiz 10-15 daqiqa ichida siz bilan bog\'lanadi.'}
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="text-xs text-indigo-400 hover:underline pt-1"
+                  className="text-xs text-indigo-400 hover:underline pt-1 cursor-pointer"
                 >
-                  Yangi so'rov yuborish
+                  {language === 'ru' ? 'Отправить новый запрос' : 'Yangi so\'rov yuborish'}
                 </button>
               </div>
             ) : (
@@ -140,7 +140,7 @@ export const FloatingChatWidget = () => {
                   <input
                     type="text"
                     required
-                    placeholder="Ismingiz"
+                    placeholder={language === 'ru' ? 'Ваше имя' : 'Ismingiz'}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full bg-slate-950/70 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
@@ -162,9 +162,9 @@ export const FloatingChatWidget = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 px-4 rounded-xl font-medium text-xs text-white bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 disabled:opacity-50"
+                  className="w-full py-2.5 px-4 rounded-xl font-medium text-xs text-white bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 disabled:opacity-50 cursor-pointer"
                 >
-                  {loading ? 'Yuborilmoqda...' : t('chat_widget_send')}
+                  {loading ? (language === 'ru' ? 'Отправка...' : 'Yuborilmoqda...') : t('chat_widget_send')}
                 </button>
               </form>
             )}

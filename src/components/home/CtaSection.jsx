@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Send, Phone, User, Briefcase, MessageSquare, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
+import { Send, Phone, User, Briefcase, MessageSquare, CheckCircle2, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
-import { Captcha } from '../common/Captcha';
 
 export const CtaSection = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { addLead, data } = useCMS();
 
   const [formData, setFormData] = useState({
@@ -16,8 +15,6 @@ export const CtaSection = () => {
     comment: ''
   });
 
-  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-  const [captchaResetTrigger, setCaptchaResetTrigger] = useState(0);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -37,10 +34,6 @@ export const CtaSection = () => {
 
     if (!validatePhone(formData.phone)) {
       newErrors.phone = t('form_error_phone');
-    }
-
-    if (!isCaptchaVerified) {
-      newErrors.captcha = t('form_error_captcha');
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -67,8 +60,6 @@ export const CtaSection = () => {
         service: 'Marketing',
         comment: ''
       });
-      setIsCaptchaVerified(false);
-      setCaptchaResetTrigger((prev) => prev + 1);
     } catch (err) {
       console.error(err);
     } finally {
@@ -109,26 +100,26 @@ export const CtaSection = () => {
               </p>
               <div className="pt-4 flex flex-wrap justify-center gap-4">
                 <a
-                  href={data.contact.telegramUrl || "https://t.me/manager_prox"}
+                  href={data.contact?.telegramUrl || "https://t.me/manager_prox"}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold text-xs tracking-wide shadow-md shadow-sky-500/30 transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold text-xs tracking-wide shadow-md shadow-sky-500/30 transition-all cursor-pointer"
                 >
-                  Telegramda darhol yozish (@manager_prox)
+                  Telegram: @manager_prox
                 </a>
                 <button
                   type="button"
                   onClick={() => setIsSuccess(false)}
-                  className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition-all cursor-pointer"
                 >
-                  Yana ariza qoldirish
+                  {language === 'ru' ? 'Отправить еще одну заявку' : 'Yana ariza qoldirish'}
                 </button>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* Name */}
+                {/* Field 1: Ism */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <User className="w-3.5 h-3.5 text-indigo-400" />
@@ -145,7 +136,7 @@ export const CtaSection = () => {
                   {errors.name && <p className="text-xs text-rose-400 mt-1">{errors.name}</p>}
                 </div>
 
-                {/* Phone */}
+                {/* Field 2: Telefon */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <Phone className="w-3.5 h-3.5 text-indigo-400" />
@@ -163,7 +154,7 @@ export const CtaSection = () => {
                 </div>
               </div>
 
-              {/* Service Select */}
+              {/* Field 3: Xizmat turi (Dropdown options strictly: SMM, Marketing, IT) */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
@@ -172,15 +163,15 @@ export const CtaSection = () => {
                 <select
                   value={formData.service}
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                  className="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                  className="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer"
                 >
-                  <option value="SMM">{t('form_service_smm')} (SMM)</option>
-                  <option value="Marketing">{t('form_service_marketing')} (Marketing)</option>
-                  <option value="IT">{t('form_service_it')} (IT xizmatlari)</option>
+                  <option value="SMM">{t('form_service_smm')}</option>
+                  <option value="Marketing">{t('form_service_marketing')}</option>
+                  <option value="IT">{t('form_service_it')}</option>
                 </select>
               </div>
 
-              {/* Comment */}
+              {/* Field 4: Izoh */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
@@ -193,16 +184,6 @@ export const CtaSection = () => {
                   onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
                   className="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
                 />
-              </div>
-
-              {/* Captcha */}
-              <div className="pt-1">
-                <Captcha
-                  onVerify={setIsCaptchaVerified}
-                  isVerified={isCaptchaVerified}
-                  resetTrigger={captchaResetTrigger}
-                />
-                {errors.captcha && <p className="text-xs text-rose-400 mt-1">{errors.captcha}</p>}
               </div>
 
               {/* Submit */}

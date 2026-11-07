@@ -12,6 +12,7 @@ export const HomePage = ({ onViewChange, onOpenConsultation, onSelectCategory })
       <HeroSection
         onOpenConsultation={() => onOpenConsultation('Marketing')}
         onViewChange={onViewChange}
+        onSelectCategory={onSelectCategory}
       />
       <ServicesPreview
         onViewChange={onViewChange}

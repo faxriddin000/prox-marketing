@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Check, Zap, ArrowRight, Sparkles, HelpCircle, ShieldCheck,
-  Calculator, Send, FileText, CheckCircle2
+  Check, Zap, ArrowRight, Sparkles, Calculator, CheckCircle2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../context/LanguageContext';
@@ -10,9 +9,9 @@ import { useCMS } from '../../context/CMSContext';
 export const PricingPage = ({ onOpenConsultation }) => {
   const { language, t } = useLanguage();
   const { data, addLead } = useCMS();
-  const smmTariffs = data.tariffs.smm || [];
-  const marketingTariff = data.tariffs.marketing || {};
-  const itTariff = data.tariffs.it || {};
+  const smmTariffs = data.tariffs?.smm || [];
+  const marketingTariff = data.tariffs?.marketing || {};
+  const itTariff = data.tariffs?.it || {};
 
   // IT Calculator state
   const [selectedItType, setSelectedItType] = useState('Landing Page / Promo sayt');
@@ -25,7 +24,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
   const handleItSubmit = async (e) => {
     e.preventDefault();
     if (!itName.trim() || itPhone.replace(/\D/g, '').length < 9) {
-      alert("Iltimos, ismingiz va to'g'ri telefon raqamingizni kiriting.");
+      alert(language === 'ru' ? "Пожалуйста, введите имя и корректный номер телефона." : "Iltimos, ismingiz va to'g'ri telefon raqamingizni kiriting.");
       return;
     }
 
@@ -35,7 +34,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
         name: itName,
         phone: itPhone,
         service: `IT Smeta: ${selectedItType}`,
-        comment: itNotes || 'Foydalanuvchi IT xizmatlari bo\'limidan bepul smeta hisob-kitobini so\'radi.'
+        comment: itNotes || (language === 'ru' ? "Запрос сметы на IT-услуги" : "Foydalanuvchi IT xizmatlari bo'limidan bepul smeta hisob-kitobini so'radi.")
       });
 
       try {
@@ -73,7 +72,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
         </p>
       </section>
 
-      {/* 8.1 SMM Tariffs (Cards & Table) */}
+      {/* 8.1 SMM Tariffs (Strict TZ Match) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-800 pb-5 gap-4">
           <div>
@@ -87,20 +86,14 @@ export const PricingPage = ({ onOpenConsultation }) => {
               {t('pricing_smm_subtitle')}
             </p>
           </div>
-          <span className="text-xs font-semibold text-pink-400 bg-pink-500/10 px-3 py-1 rounded-full border border-pink-500/20 self-start sm:self-auto">
-            4 ta shaffof paket
-          </span>
         </div>
 
-        {/* SMM 4 Cards */}
+        {/* SMM 4 Cards - Pure TZ without fabricated discounts */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {smmTariffs.map((plan) => {
             const duration =
               plan[`duration${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
               plan.durationUz;
-            const savings =
-              plan[`savings${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
-              plan.savingsUz;
             const period =
               plan[`period${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
               plan.periodUz;
@@ -112,25 +105,12 @@ export const PricingPage = ({ onOpenConsultation }) => {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 ${
-                  plan.isPopular
-                    ? 'bg-gradient-to-b from-indigo-950/80 to-slate-900 border-2 border-indigo-500 shadow-2xl shadow-indigo-500/20 -translate-y-2'
-                    : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700 hover:bg-slate-850/60'
-                }`}
+                className="relative rounded-3xl p-6 sm:p-7 bg-slate-900/80 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                {plan.isPopular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold text-[11px] px-3.5 py-0.5 rounded-full uppercase tracking-wider shadow-lg">
-                    {t('pricing_popular_badge')}
-                  </div>
-                )}
-
                 <div>
-                  <h3 className="font-extrabold text-xl text-white mb-1">
+                  <h3 className="font-extrabold text-xl text-white mb-4">
                     {duration}
                   </h3>
-                  <div className="inline-block px-2.5 py-0.5 rounded-md bg-indigo-500/10 text-indigo-300 font-semibold text-xs mb-6 border border-indigo-500/20">
-                    {savings}
-                  </div>
 
                   <div className="flex items-baseline gap-1.5 mb-8">
                     <span className="text-4xl font-extrabold text-white tracking-tight">
@@ -151,12 +131,8 @@ export const PricingPage = ({ onOpenConsultation }) => {
                 </div>
 
                 <button
-                  onClick={() => onOpenConsultation(`SMM: ${duration} (${plan.price})`)}
-                  className={`w-full py-3 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    plan.isPopular
-                      ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30'
-                      : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
-                  }`}
+                  onClick={() => onOpenConsultation(`SMM: ${duration}`)}
+                  className="w-full py-3 px-4 rounded-xl text-xs font-bold bg-slate-800 hover:bg-pink-600 text-slate-200 hover:text-white border border-slate-700 hover:border-pink-500 transition-all cursor-pointer"
                 >
                   {t('pricing_btn_order')}
                 </button>
@@ -164,64 +140,9 @@ export const PricingPage = ({ onOpenConsultation }) => {
             );
           })}
         </div>
-
-        {/* Detailed Comparison Table */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 overflow-x-auto">
-          <h3 className="text-lg font-bold text-white mb-4">
-            Tariflarning taqqoslash jadvali
-          </h3>
-          <table className="w-full text-left text-xs min-w-[600px]">
-            <thead>
-              <tr className="border-b border-slate-800 text-slate-400">
-                <th className="py-3 px-4">Paket parametrlari</th>
-                <th className="py-3 px-4">1 oylik</th>
-                <th className="py-3 px-4">3 oylik paket</th>
-                <th className="py-3 px-4 text-indigo-400 font-bold">6 oylik paket</th>
-                <th className="py-3 px-4 text-emerald-400 font-bold">12 oylik paket</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
-              <tr>
-                <td className="py-3.5 px-4 font-semibold text-white">Oylik to'lov</td>
-                <td className="py-3.5 px-4 font-bold">$1500</td>
-                <td className="py-3.5 px-4 font-bold">$1350</td>
-                <td className="py-3.5 px-4 font-bold text-indigo-300">$1200</td>
-                <td className="py-3.5 px-4 font-bold text-emerald-300">$1000</td>
-              </tr>
-              <tr>
-                <td className="py-3.5 px-4">Mijoz tejovi</td>
-                <td className="py-3.5 px-4 text-slate-500">—</td>
-                <td className="py-3.5 px-4 text-indigo-400 font-semibold">$450 tejash</td>
-                <td className="py-3.5 px-4 text-indigo-400 font-semibold">$1800 tejash</td>
-                <td className="py-3.5 px-4 text-emerald-400 font-semibold">$6000 eng katta tejov</td>
-              </tr>
-              <tr>
-                <td className="py-3.5 px-4">SMM strategiya va yo'l xaritasi</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ Standart</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ Kengaytirilgan</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ Chuqurlashtirilgan</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ Yillik to'liq strategiya</td>
-              </tr>
-              <tr>
-                <td className="py-3.5 px-4">Instagram & FB target reklama</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ Oylik</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ A/B testlar</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ A/B + Retargeting</td>
-                <td className="py-3.5 px-4 text-emerald-400">✓ Maksimal scaling</td>
-              </tr>
-              <tr>
-                <td className="py-3.5 px-4">Telegram bot integratsiyasi</td>
-                <td className="py-3.5 px-4 text-slate-600">—</td>
-                <td className="py-3.5 px-4 text-slate-600">—</td>
-                <td className="py-3.5 px-4 text-slate-400">Qo'shimcha kelishuv</td>
-                <td className="py-3.5 px-4 text-emerald-400 font-semibold">✓ Paketga kiritilgan</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </section>
 
-      {/* 8.2 Marketing Tariffs */}
+      {/* 8.2 Marketing Xizmati (Strict TZ Match) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-800 pb-5 gap-4">
           <div>
@@ -232,47 +153,53 @@ export const PricingPage = ({ onOpenConsultation }) => {
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-400">
-              {t('pricing_mkt_subtitle')}
+              {language === 'ru'
+                ? 'Начальная цена — от $2000 (рассчитывается индивидуально в зависимости от масштаба проекта).'
+                : "Boshlang'ich narx — $2000 dan (loyiha hajmiga qarab individual hisoblanadi)."}
             </p>
           </div>
-          <span className="text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 self-start sm:self-auto">
-            To'liq autsorsing
-          </span>
         </div>
 
         <div className="bg-gradient-to-br from-slate-900/90 via-slate-900 to-indigo-950/40 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Kompleks marketing boshqaruvi</span>
-            </div>
-
             <div className="space-y-2">
               <h3 className="text-3xl font-extrabold text-white">
-                {marketingTariff.prefixUz || "Boshlang'ich narx —"} {marketingTariff.startingPrice || "$2000"} dan
+                {language === 'ru' ? 'Начальная цена — от $2000' : "Boshlang'ich narx — $2000 dan"}
               </h3>
               <p className="text-xs sm:text-sm text-slate-300">
-                {marketingTariff.noteUz || "Loyiha hajmiga qarab individual hisoblanadi"}
+                {language === 'ru'
+                  ? '(рассчитывается индивидуально в зависимости от масштаба проекта).'
+                  : '(loyiha hajmiga qarab individual hisoblanadi).'}
               </p>
             </div>
 
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-              Biznesingiz uchun alohida marketing bo'limi tuzish va shtat saqlashdan 3 barobar arzon va 5 barobar samaraliroq yechim. Barcha yo'nalishlar bitta professional jamoa qo'lida.
+              {language === 'ru'
+                ? 'Комплексный маркетинг охватывает все 7 направлений, от SMM и таргетированной рекламы до брендинга, сквозной аналитики и аудита отдела продаж.'
+                : "Marketing xizmati SMM, target reklama, brending, strategik konsalting, blogerlar bilan ishlash hamda sotuv jarayonlarini to'liq tizimli nazoratga olishni o'z ichiga oladi."}
             </p>
 
             <button
-              onClick={() => onOpenConsultation(`Marketing Kompleks ($2000 dan)`)}
+              onClick={() => onOpenConsultation('Marketing')}
               className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
             >
-              Marketing taklifini buyurtma qilish
+              {t('pricing_mkt_btn')}
             </button>
           </div>
 
           <div className="lg:col-span-5 bg-slate-950/80 border border-slate-800 rounded-2xl p-6 sm:p-7 space-y-3.5">
             <h4 className="text-sm font-bold text-white mb-2">
-              Tarif tarkibiga nimalar kiradi:
+              {language === 'ru' ? 'В комплекс маркетинга входит:' : 'Tarif tarkibiga nimalar kiradi:'}
             </h4>
-            {(marketingTariff.includedUz || []).map((inc, iIdx) => (
+            {((language === 'ru' ? marketingTariff.includedRu : marketingTariff.includedUz) || [
+              "SMM xizmatlaridagi barcha takliflar",
+              "Target reklama (Google & Telegram Ads)",
+              "Branding & Brandbook",
+              "Marketing strategiya va konsalting",
+              "Influencer marketing",
+              "Sotuv bo'limi nazorati",
+              "To'liq sotuvni nazoratga olish"
+            ]).map((inc, iIdx) => (
               <div key={iIdx} className="flex items-start gap-2.5 text-xs text-slate-300">
                 <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span>{inc}</span>
@@ -282,7 +209,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
         </div>
       </section>
 
-      {/* 8.3 IT Xizmatlari & Bepul Smeta Hisoblagich */}
+      {/* 8.3 IT Xizmatlari & Bepul Smeta Hisoblagich (Strict TZ Match) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-800 pb-5 gap-4">
           <div>
@@ -293,12 +220,9 @@ export const PricingPage = ({ onOpenConsultation }) => {
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-400">
-              {itTariff.noteUz || "Har bir loyiha individual buyurtma asosida kelishiladi"}
+              {t('pricing_it_subtitle')}
             </p>
           </div>
-          <span className="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20 self-start sm:self-auto">
-            Individual baholash
-          </span>
         </div>
 
         {/* 2-Column layout: IT categories list & Interactive Estimator Form */}
@@ -331,7 +255,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
 
                   <div className="text-right">
                     <span className="text-xs font-semibold text-slate-400 block">
-                      Taxminiy muddat
+                      {language === 'ru' ? 'Ориентировочный срок' : 'Taxminiy muddat'}
                     </span>
                     <span className="text-xs font-mono font-bold text-slate-200">
                       {estimate}
@@ -342,7 +266,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
             })}
           </div>
 
-          {/* Right: Embedded Smeta Form */}
+          {/* Right: Embedded Smeta Form (Without Anti-spam Captcha) */}
           <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
@@ -362,24 +286,26 @@ export const PricingPage = ({ onOpenConsultation }) => {
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-6 text-center space-y-3">
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
                 <h4 className="font-bold text-white text-base">
-                  Smeta so'rovingiz qabul qilindi!
+                  {language === 'ru' ? 'Заявка на смету принята!' : "Smeta so'rovingiz qabul qilindi!"}
                 </h4>
                 <p className="text-xs text-slate-300">
-                  IT mutaxassisimiz 15 daqiqa ichida siz bilan bog'lanib, tanlangan loyiha bo'yicha batafsil tijorat taklifini yuboradi.
+                  {language === 'ru'
+                    ? 'Наш IT-специалист свяжется с вами в течение 15 минут с детальным предложением.'
+                    : "IT mutaxassisimiz 15 daqiqa ichida siz bilan bog'lanib, tanlangan loyiha bo'yicha batafsil tijorat taklifini yuboradi."}
                 </p>
                 <button
                   type="button"
                   onClick={() => setItSuccess(false)}
-                  className="text-xs text-cyan-400 hover:underline pt-2"
+                  className="text-xs text-cyan-400 hover:underline pt-2 cursor-pointer"
                 >
-                  Yana boshqa loyiha hisoblatish
+                  {language === 'ru' ? 'Рассчитать другой проект' : "Yana boshqa loyiha hisoblatish"}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleItSubmit} className="space-y-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Tanlangan loyiha turi:
+                    {language === 'ru' ? 'Выбранный тип проекта:' : 'Tanlangan loyiha turi:'}
                   </label>
                   <input
                     type="text"
@@ -392,12 +318,12 @@ export const PricingPage = ({ onOpenConsultation }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Ismingiz <span className="text-rose-400">*</span>
+                      {t('form_name')} <span className="text-rose-400">*</span>
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Masalan: Sardor"
+                      placeholder={t('form_name_placeholder')}
                       value={itName}
                       onChange={(e) => setItName(e.target.value)}
                       className="w-full bg-slate-950/70 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
@@ -406,7 +332,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
 
                   <div>
                     <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Telefon raqamingiz <span className="text-rose-400">*</span>
+                      {t('form_phone')} <span className="text-rose-400">*</span>
                     </label>
                     <input
                       type="tel"
@@ -421,11 +347,11 @@ export const PricingPage = ({ onOpenConsultation }) => {
 
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Loyiha talablari yoki izoh (ixtiyoriy):
+                    {t('form_comment')} ({language === 'ru' ? 'необязательно' : 'ixtiyoriy'}):
                   </label>
                   <textarea
                     rows="2"
-                    placeholder="Qanday funksiyalar kerak, o'xshash misol saytlar..."
+                    placeholder={t('form_comment_placeholder')}
                     value={itNotes}
                     onChange={(e) => setItNotes(e.target.value)}
                     className="w-full bg-slate-950/70 border border-slate-700/80 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
@@ -437,7 +363,7 @@ export const PricingPage = ({ onOpenConsultation }) => {
                   disabled={itSubmitting}
                   className="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-950 bg-gradient-to-r from-cyan-400 to-indigo-300 hover:from-cyan-300 hover:to-indigo-200 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 disabled:opacity-50 cursor-pointer"
                 >
-                  {itSubmitting ? 'Yuborilmoqda...' : t('pricing_it_btn')}
+                  {itSubmitting ? t('form_submitting') : t('pricing_it_btn')}
                 </button>
               </form>
             )}

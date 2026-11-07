@@ -51,11 +51,11 @@ export const AboutPage = ({ onOpenConsultation }) => {
             <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-slate-400">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                Rasmiy korporativ agentlik
+                {language === 'ru' ? 'Официальное агентство' : "Rasmiy korporativ agentlik"}
               </span>
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                Toshkent, O'zbekiston
+                {language === 'ru' ? 'Ташкент, Узбекистан' : "Toshkent, O'zbekiston"}
               </span>
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-indigo-400" />
@@ -88,7 +88,7 @@ export const AboutPage = ({ onOpenConsultation }) => {
                 onClick={() => onOpenConsultation('Marketing')}
                 className="inline-flex items-center gap-2 text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
               >
-                <span>Biz bilan hamkorlik qilish</span>
+                <span>{language === 'ru' ? 'Сотрудничать с нами' : 'Biz bilan hamkorlik qilish'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -171,10 +171,14 @@ export const AboutPage = ({ onOpenConsultation }) => {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-gradient-to-r from-indigo-900/40 via-slate-900 to-cyan-900/30 border border-slate-800 rounded-3xl p-8 sm:p-12 space-y-6">
           <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Biznesingizni yangi bosqichga olib chiqishga tayyormisiz?
+            {language === 'ru'
+              ? 'Готовы вывести ваш бизнес на новый уровень?'
+              : 'Biznesingizni yangi bosqichga olib chiqishga tayyormisiz?'}
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
-            Prox Marketing Agency ekspertlari bilan 15 daqiqalik bepul tahlil va konsultatsiya oling.
+            {language === 'ru'
+              ? 'Получите 15-минутную бесплатную консультацию и аудит от экспертов Prox Marketing Agency.'
+              : 'Prox Marketing Agency ekspertlari bilan 15 daqiqalik bepul tahlil va konsultatsiya oling.'}
           </p>
           <button
             onClick={() => onOpenConsultation('Marketing')}

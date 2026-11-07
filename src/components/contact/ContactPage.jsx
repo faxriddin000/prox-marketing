@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Phone, Send, MapPin, Mail, CheckCircle2,
-  User, Briefcase, MessageSquare, ExternalLink, ShieldCheck
+  Phone, Send, MapPin, CheckCircle2,
+  User, Briefcase, MessageSquare, ExternalLink
 } from 'lucide-react';
-import { InstagramIcon } from '../common/Icons';
 import confetti from 'canvas-confetti';
+import { InstagramIcon } from '../common/Icons';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
-import { Captcha } from '../common/Captcha';
 
 export const ContactPage = () => {
   const { language, t } = useLanguage();
@@ -21,8 +20,6 @@ export const ContactPage = () => {
     comment: ''
   });
 
-  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-  const [captchaResetTrigger, setCaptchaResetTrigger] = useState(0);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -42,10 +39,6 @@ export const ContactPage = () => {
 
     if (!validatePhone(formData.phone)) {
       newErrors.phone = t('form_error_phone');
-    }
-
-    if (!isCaptchaVerified) {
-      newErrors.captcha = t('form_error_captcha');
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -72,8 +65,6 @@ export const ContactPage = () => {
         service: 'Marketing',
         comment: ''
       });
-      setIsCaptchaVerified(false);
-      setCaptchaResetTrigger((prev) => prev + 1);
     } catch (err) {
       console.error(err);
     } finally {
@@ -103,29 +94,29 @@ export const ContactPage = () => {
           {/* Left Column: Direct Official Contact Cards */}
           <div className="lg:col-span-5 space-y-6">
             <h3 className="text-xl font-bold text-white mb-2">
-              To'g'ridan-to'g'ri aloqa kanallari
+              {t('contact_channels_title')}
             </h3>
             <p className="text-xs sm:text-sm text-slate-400 mb-6">
-              O'zingizga qulay usulni tanlang, tezkor javob qaytaramiz.
+              {t('contact_channels_desc')}
             </p>
 
             {/* Phone */}
             <a
               href={`tel:${contact.phoneClean || '+998200260418'}`}
-              className="group p-5 rounded-2xl bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-indigo-500/50 flex items-center gap-4 transition-all"
+              className="group p-5 rounded-2xl bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 flex items-center gap-4 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Phone className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Phone className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
                 <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
                   {t('contact_phone_label')}
                 </span>
-                <span className="text-base font-bold text-white group-hover:text-indigo-300 transition-colors">
+                <span className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
                   {contact.phone || '+998 20 026 04 18'}
                 </span>
               </div>
-              <ExternalLink className="w-4 h-4 text-slate-600 group-hover:text-slate-300" />
+              <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-white" />
             </a>
 
             {/* Telegram */}
@@ -133,20 +124,20 @@ export const ContactPage = () => {
               href={contact.telegramUrl || 'https://t.me/manager_prox'}
               target="_blank"
               rel="noreferrer"
-              className="group p-5 rounded-2xl bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 flex items-center gap-4 transition-all"
+              className="group p-5 rounded-2xl bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 flex items-center gap-4 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <Send className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Send className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
                 <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
                   {t('contact_telegram_label')}
                 </span>
-                <span className="text-base font-bold text-white group-hover:text-sky-300 transition-colors">
+                <span className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
                   {contact.telegram || '@manager_prox'}
                 </span>
               </div>
-              <ExternalLink className="w-4 h-4 text-slate-600 group-hover:text-slate-300" />
+              <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-white" />
             </a>
 
             {/* Instagram */}
@@ -154,27 +145,27 @@ export const ContactPage = () => {
               href={contact.instagramUrl || 'https://instagram.com/prox_uz'}
               target="_blank"
               rel="noreferrer"
-              className="group p-5 rounded-2xl bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-pink-500/50 flex items-center gap-4 transition-all"
+              className="group p-5 rounded-2xl bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 flex items-center gap-4 transition-all"
             >
-              <div className="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 border border-pink-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                <InstagramIcon className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <InstagramIcon className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
                 <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
                   {t('contact_instagram_label')}
                 </span>
-                <span className="text-base font-bold text-white group-hover:text-pink-300 transition-colors">
+                <span className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
                   {contact.instagram || '@prox_uz'}
                 </span>
               </div>
-              <ExternalLink className="w-4 h-4 text-slate-600 group-hover:text-slate-300" />
+              <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-white" />
             </a>
 
-            {/* Conditional Office Address (Rendered as soon as set in Admin Panel) */}
+            {/* Conditional Office Address */}
             {contact.address && (
               <div className="p-5 rounded-2xl bg-slate-900/70 border border-slate-800 flex items-center gap-4 animate-fadeIn">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
-                  <MapPin className="w-6 h-6" />
+                <div className="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center shrink-0">
+                  <MapPin className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">
@@ -188,7 +179,7 @@ export const ContactPage = () => {
             )}
           </div>
 
-          {/* Right Column: Interactive Lead Capture Form */}
+          {/* Right Column: Clean Lead Capture Form (Strict 4 Fields) */}
           <div className="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-white tracking-tight">
@@ -214,16 +205,16 @@ export const ContactPage = () => {
                   <button
                     type="button"
                     onClick={() => setIsSuccess(false)}
-                    className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold"
+                    className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold cursor-pointer"
                   >
-                    Yangi ariza yuborish
+                    {language === 'ru' ? 'Отправить еще одну заявку' : 'Yangi ariza yuborish'}
                   </button>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Name */}
+                  {/* Field 1: Ism */}
                   <div>
                     <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                       <User className="w-3.5 h-3.5 text-indigo-400" />
@@ -240,7 +231,7 @@ export const ContactPage = () => {
                     {errors.name && <p className="text-xs text-rose-400 mt-1">{errors.name}</p>}
                   </div>
 
-                  {/* Phone */}
+                  {/* Field 2: Telefon */}
                   <div>
                     <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                       <Phone className="w-3.5 h-3.5 text-indigo-400" />
@@ -258,7 +249,7 @@ export const ContactPage = () => {
                   </div>
                 </div>
 
-                {/* Service */}
+                {/* Field 3: Xizmat turi (Dropdown options strictly: SMM, Marketing, IT) */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
@@ -267,15 +258,15 @@ export const ContactPage = () => {
                   <select
                     value={formData.service}
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                    className="w-full bg-slate-950/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-slate-950/70 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
                   >
-                    <option value="SMM">{t('form_service_smm')} (SMM)</option>
-                    <option value="Marketing">{t('form_service_marketing')} (Marketing)</option>
-                    <option value="IT">{t('form_service_it')} (IT xizmatlari)</option>
+                    <option value="SMM">{t('form_service_smm')}</option>
+                    <option value="Marketing">{t('form_service_marketing')}</option>
+                    <option value="IT">{t('form_service_it')}</option>
                   </select>
                 </div>
 
-                {/* Comment */}
+                {/* Field 4: Izoh */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
@@ -289,14 +280,6 @@ export const ContactPage = () => {
                     className="w-full bg-slate-950/70 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                   />
                 </div>
-
-                {/* Captcha */}
-                <Captcha
-                  onVerify={setIsCaptchaVerified}
-                  isVerified={isCaptchaVerified}
-                  resetTrigger={captchaResetTrigger}
-                />
-                {errors.captcha && <p className="text-xs text-rose-400">{errors.captcha}</p>}
 
                 {/* Submit button */}
                 <button

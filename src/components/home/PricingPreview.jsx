@@ -1,13 +1,13 @@
 import React from 'react';
-import { ArrowRight, Check, Zap, Sparkles } from 'lucide-react';
+import { ArrowRight, Zap } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
 export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
   const { language, t } = useLanguage();
   const { data } = useCMS();
-  const smmTariffs = data.tariffs.smm || [];
-  const marketingTariff = data.tariffs.marketing || {};
+  const smmTariffs = data.tariffs?.smm || [];
+  const marketingTariff = data.tariffs?.marketing || {};
 
   return (
     <section className="py-24 relative overflow-hidden bg-slate-900/60 border-t border-slate-900">
@@ -25,15 +25,12 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
           </p>
         </div>
 
-        {/* 4 SMM Tier Cards */}
+        {/* SMM 4 Package Cards (Strict 100% TZ structure, No fabricated discounts or badges) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {smmTariffs.map((plan) => {
             const duration =
               plan[`duration${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
               plan.durationUz;
-            const savings =
-              plan[`savings${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
-              plan.savingsUz;
             const period =
               plan[`period${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
               plan.periodUz;
@@ -41,41 +38,24 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 ${
-                  plan.isPopular
-                    ? 'bg-gradient-to-b from-indigo-950/70 to-slate-900/90 border-2 border-indigo-500 shadow-xl shadow-indigo-500/15 -translate-y-1'
-                    : 'bg-slate-900/70 border border-slate-800 hover:border-slate-700'
-                }`}
+                className="relative rounded-3xl p-6 bg-slate-900/80 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                {plan.isPopular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white font-bold text-[11px] px-3 py-0.5 rounded-full uppercase tracking-wider shadow-md">
-                    {t('pricing_popular_badge')}
-                  </div>
-                )}
-
                 <div>
-                  <h3 className="font-bold text-base text-white mb-1">
+                  <h3 className="font-extrabold text-lg text-white mb-4">
                     {duration}
                   </h3>
-                  <p className="text-xs text-indigo-400 font-semibold mb-4">
-                    {savings}
-                  </p>
 
                   <div className="flex items-baseline gap-1 mb-6">
-                    <span className="text-3xl font-extrabold text-white tracking-tight">
+                    <span className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                       {plan.price}
                     </span>
-                    <span className="text-xs text-slate-400">{period}</span>
+                    <span className="text-xs text-slate-400 font-medium">{period}</span>
                   </div>
                 </div>
 
                 <button
-                  onClick={() => onOpenConsultation('SMM')}
-                  className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    plan.isPopular
-                      ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30'
-                      : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
-                  }`}
+                  onClick={() => onOpenConsultation(`SMM: ${duration}`)}
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white border border-slate-700 hover:border-indigo-500 transition-all cursor-pointer"
                 >
                   {t('pricing_btn_order')}
                 </button>
@@ -84,60 +64,54 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
           })}
         </div>
 
-        {/* Marketing & IT Callout Banner */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-950/90 border border-slate-800 rounded-2xl p-6 sm:p-8">
-          {/* Marketing box */}
+        {/* Marketing & IT Callout - Strict TZ Match */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-950/90 border border-slate-800 rounded-3xl p-6 sm:p-8">
+          {/* Marketing Box */}
           <div className="space-y-3 pr-0 md:pr-4 border-b md:border-b-0 md:border-r border-slate-800/80 pb-6 md:pb-0">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">
-              Keng ko'lamli yechim
-            </span>
             <h4 className="text-xl font-bold text-white">
               {t('pricing_mkt_title')}
             </h4>
-            <div className="flex items-baseline gap-2">
-              <span className="text-xs text-slate-400">
-                {marketingTariff.prefixUz || "Boshlang'ich narx"}:
-              </span>
-              <span className="text-2xl font-extrabold text-white">
-                {marketingTariff.startingPrice || "$2000"} dan
-              </span>
+            <div className="space-y-1">
+              <p className="text-base sm:text-lg font-bold text-white">
+                {language === 'ru'
+                  ? 'Начальная цена — от $2000'
+                  : "Boshlang'ich narx — $2000 dan"}
+              </p>
+              <p className="text-xs text-slate-400">
+                {language === 'ru'
+                  ? '(рассчитывается индивидуально в зависимости от масштаба проекта)'
+                  : "(loyiha hajmiga qarab individual hisoblanadi)"}
+              </p>
             </div>
-            <p className="text-xs text-slate-400">
-              {marketingTariff.noteUz || "Loyiha hajmiga qarab individual hisoblanadi"}
-            </p>
             <button
               onClick={() => onOpenConsultation('Marketing')}
-              className="inline-flex items-center gap-2 text-xs font-semibold text-indigo-400 hover:text-indigo-300 pt-2"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-indigo-400 hover:text-indigo-300 pt-2 cursor-pointer group"
             >
-              <span>Marketing taklifini olish</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>{t('pricing_btn_order')}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
 
-          {/* IT box */}
+          {/* IT Box */}
           <div className="space-y-3 pl-0 md:pl-4">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-              Dasturiy yechimlar
-            </span>
             <h4 className="text-xl font-bold text-white">
               {t('pricing_it_title')}
             </h4>
-            <p className="text-sm text-slate-300">
-              Har bir loyiha (sayt, mobil ilova, bot) individual buyurtma asosida baholanadi.
+            <p className="text-xs sm:text-sm text-slate-300">
+              {t('pricing_it_subtitle')}
             </p>
-            <p className="text-xs text-slate-400">
-              Biznesingiz talablariga mos bepul texnik hisob-kitob va smeta taqdim etamiz.
-            </p>
-            <button
-              onClick={() => {
-                onViewChange('tariffs');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="inline-flex items-center gap-2 text-xs font-semibold text-cyan-400 hover:text-cyan-300 pt-2"
-            >
-              <span>Bepul smeta hisoblagichiga o'tish</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            <div className="pt-2">
+              <button
+                onClick={() => {
+                  onViewChange('tariffs');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-cyan-400 hover:text-cyan-300 cursor-pointer group"
+              >
+                <span>{t('pricing_it_btn')}</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
