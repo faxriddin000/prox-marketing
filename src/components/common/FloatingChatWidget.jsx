@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { MessageCircle, X, Send, Phone, User, CheckCircle2, ExternalLink } from 'lucide-react';
+import { MessageCircle, X, Send, Phone, User, CheckCircle2, ExternalLink, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
+import { TelegramIcon } from './Icons';
 
 export const FloatingChatWidget = () => {
   const { language, t } = useLanguage();
@@ -25,7 +26,8 @@ export const FloatingChatWidget = () => {
         name,
         phone,
         service: language === 'ru' ? 'Онлайн-чат / Обратный звонок' : 'Tezkor Chat / Aloqa',
-        comment: language === 'ru' ? 'Заказ обратного звонка из онлайн-виджета.' : 'Foydalanuvchi online yordamchi vidjeti orqali tezkor qo\'ng\'iroq so\'radi.'
+        comment: language === 'ru' ? 'Заказ обратного звонка из онлайн-виджета.' : 'Foydalanuvchi online yordamchi vidjeti orqali tezkor qo\'ng\'iroq so\'radi.',
+        source: 'Online Yordamchi Vidjeti'
       });
       setSubmitted(true);
       setName('');
@@ -162,9 +164,19 @@ export const FloatingChatWidget = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 px-4 rounded-xl font-medium text-xs text-white bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 disabled:opacity-50 cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl font-medium text-xs text-white bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 disabled:opacity-70 cursor-pointer"
                 >
-                  {loading ? (language === 'ru' ? 'Отправка...' : 'Yuborilmoqda...') : t('chat_widget_send')}
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
+                      <span>{language === 'ru' ? 'Отправка...' : 'Yuborilmoqda...'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{t('chat_widget_send')}</span>
+                      <Send className="w-3.5 h-3.5" />
+                    </>
+                  )}
                 </button>
               </form>
             )}

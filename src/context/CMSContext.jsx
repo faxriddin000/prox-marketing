@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { INITIAL_CMS_DATA } from '../data/initialData';
+import { sendLeadToTelegram } from '../services/telegramService';
 
 const CMS_STORAGE_KEY = 'prox_marketing_cms_state_v1';
 
@@ -212,38 +213,26 @@ export const CMSProvider = ({ children }) => {
       status: 'Yangi'
     };
 
-    // Save lead locally
+    // Send real-time notification to Telegram Bot API
+    let telegramResult = null;
+    try {
+      telegramResult = await sendLeadToTelegram(newLead, data.telegramSettings);
+      newLead.sentToTelegram = Boolean(telegramResult?.success);
+    } catch (err) {
+      console.warn('Telegram Bot notification attempt failed:', err);
+      newLead.sentToTelegram = false;
+    }
+
+    // Save lead locally in CMS state
     setData((prev) => ({
       ...prev,
       leads: [newLead, ...prev.leads]
     }));
 
-    // If Telegram Bot is configured, send real HTTP request
-    const { botToken, chatId } = data.telegramSettings;
-    if (botToken && chatId) {
-      try {
-        const text = `🚀 *Yangi ariza kelib tushdi! (proxmarketing.uz)*\n\n` +
-          `👤 *Mijoz:* ${newLead.name}\n` +
-          `📞 *Telefon:* ${newLead.phone}\n` +
-          `💼 *Xizmat:* ${newLead.service}\n` +
-          `📝 *Izoh:* ${newLead.comment || 'Izoh qoldirilmadi'}\n` +
-          `⏱ *Vaqt:* ${newLead.date}`;
-
-        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text,
-            parse_mode: 'Markdown'
-          })
-        });
-      } catch (err) {
-        console.warn('Telegram Bot notification attempt failed:', err);
-      }
-    }
-
-    return newLead;
+    return {
+      lead: newLead,
+      telegram: telegramResult
+    };
   };
 
   const updateLeadStatus = (leadId, newStatus) => {

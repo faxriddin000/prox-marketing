@@ -8,6 +8,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useCMS } from '../../context/CMSContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { testTelegramConnection } from '../../services/telegramService';
 
 export const AdminDashboard = ({ onBackToSite }) => {
   const { currentUser, isAdmin, isEditor, logout, canEditPricing, canManageSettings, canDeleteLeads } = useAuth();
@@ -123,23 +124,10 @@ export const AdminDashboard = ({ onBackToSite }) => {
     }
     setTgTestStatus("Yuborilmoqda...");
     try {
-      const res = await fetch(`https://api.telegram.org/bot${tgSettings.botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: tgSettings.chatId,
-          text: `🔔 *Prox Marketing Agency — Test Xabari*\n\nAdmin panel orqali ulanish muvaffaqiyatli tekshirildi!`,
-          parse_mode: 'Markdown'
-        })
-      });
-      const json = await res.json();
-      if (json.ok) {
-        setTgTestStatus("✓ Xabar muvaffaqiyatli yuborildi!");
-      } else {
-        setTgTestStatus(`Xatolik: ${json.description || 'Telegram rad etdi'}`);
-      }
+      await testTelegramConnection(tgSettings);
+      setTgTestStatus("✓ Xabar muvaffaqiyatli yuborildi! Telegram chatni tekshiring.");
     } catch (err) {
-      setTgTestStatus(`Tarmoq xatosi: ${err.message}`);
+      setTgTestStatus(`Xatolik: ${err.message || 'Telegram rad etdi'}`);
     }
   };
 

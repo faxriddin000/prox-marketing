@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
   Phone, Send, MapPin, CheckCircle2,
-  User, Briefcase, MessageSquare, ExternalLink
+  User, Briefcase, MessageSquare, ExternalLink, Loader2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { InstagramIcon } from '../common/Icons';
+import { InstagramIcon, TelegramIcon } from '../common/Icons';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
@@ -20,6 +20,7 @@ export const ContactPage = () => {
     comment: ''
   });
 
+  const [submittedData, setSubmittedData] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -48,7 +49,9 @@ export const ContactPage = () => {
 
     setIsSubmitting(true);
     try {
-      await addLead(formData);
+      const currentPayload = { ...formData, source: 'Aloqa sahifasi shakli' };
+      await addLead(currentPayload);
+      setSubmittedData(currentPayload);
 
       try {
         confetti({
@@ -67,6 +70,7 @@ export const ContactPage = () => {
       });
     } catch (err) {
       console.error(err);
+      alert(language === 'ru' ? 'Ошибка при отправке в Telegram.' : 'Telegramga yuborishda xatolik yuz berdi.');
     } finally {
       setIsSubmitting(false);
     }
@@ -191,17 +195,57 @@ export const ContactPage = () => {
             </div>
 
             {isSuccess ? (
-              <div className="text-center py-8 space-y-4 animate-fadeIn">
-                <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto ring-8 ring-emerald-500/5">
-                  <CheckCircle2 className="w-9 h-9" />
+              <div className="text-center py-6 space-y-4 animate-fadeIn">
+                <div className="relative w-16 h-16 mx-auto">
+                  <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping" />
+                  <div className="relative w-16 h-16 bg-emerald-500/15 text-emerald-400 rounded-full flex items-center justify-center border border-emerald-500/30">
+                    <CheckCircle2 className="w-9 h-9" />
+                  </div>
                 </div>
-                <h4 className="text-2xl font-bold text-white">
+
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                  <TelegramIcon className="w-3.5 h-3.5 fill-sky-400" />
+                  <span>{t('form_telegram_status')}</span>
+                </div>
+
+                <h4 className="text-2xl font-bold text-white tracking-tight">
                   {t('form_success_title')}
                 </h4>
-                <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
                   {t('form_success_desc')}
                 </p>
-                <div className="pt-4">
+
+                {submittedData && (
+                  <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 text-left text-xs space-y-1.5 max-w-md mx-auto">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 pb-1 border-b border-slate-800">
+                      {language === 'ru' ? 'Сводка заявки:' : 'Ariza xulosasi:'}
+                    </div>
+                    <div className="flex justify-between py-0.5">
+                      <span className="text-slate-400">{t('form_summary_name')}:</span>
+                      <span className="font-semibold text-white">{submittedData.name}</span>
+                    </div>
+                    <div className="flex justify-between py-0.5">
+                      <span className="text-slate-400">{t('form_summary_phone')}:</span>
+                      <span className="font-mono font-semibold text-white">{submittedData.phone}</span>
+                    </div>
+                    <div className="flex justify-between py-0.5">
+                      <span className="text-slate-400">{t('form_summary_service')}:</span>
+                      <span className="font-semibold text-indigo-400">{submittedData.service}</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-4 flex flex-wrap justify-center gap-3">
+                  <a
+                    href={contact.telegramUrl || 'https://t.me/manager_prox'}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-sky-500/25 transition-all cursor-pointer"
+                  >
+                    <TelegramIcon className="w-4 h-4 fill-white" />
+                    <span>{t('form_tg_direct')}</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                   <button
                     type="button"
                     onClick={() => setIsSuccess(false)}
@@ -249,7 +293,7 @@ export const ContactPage = () => {
                   </div>
                 </div>
 
-                {/* Field 3: Xizmat turi (Dropdown options strictly: SMM, Marketing, IT) */}
+                {/* Field 3: Xizmat yoki Kurs tanlash */}
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1.5">
                     <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
@@ -281,14 +325,17 @@ export const ContactPage = () => {
                   />
                 </div>
 
-                {/* Submit button */}
+                {/* Submit button with loading state */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full mt-2 py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 active:scale-[0.99] transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full mt-2 py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 active:scale-[0.99] transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
-                    <span>{t('form_submitting')}</span>
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>{t('form_submitting')}</span>
+                    </>
                   ) : (
                     <>
                       <span>{t('form_submit')}</span>

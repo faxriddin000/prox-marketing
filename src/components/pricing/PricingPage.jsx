@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Check, Zap, ArrowRight, Sparkles, Calculator, CheckCircle2
+  Check, Zap, ArrowRight, Sparkles, Calculator, CheckCircle2, Loader2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../context/LanguageContext';
@@ -34,7 +34,8 @@ export const PricingPage = ({ onOpenConsultation }) => {
         name: itName,
         phone: itPhone,
         service: `IT Smeta: ${selectedItType}`,
-        comment: itNotes || (language === 'ru' ? "Запрос сметы на IT-услуги" : "Foydalanuvchi IT xizmatlari bo'limidan bepul smeta hisob-kitobini so'radi.")
+        comment: itNotes || (language === 'ru' ? "Запрос сметы на IT-услуги" : "Foydalanuvchi IT xizmatlari bo'limidan bepul smeta hisob-kitobini so'radi."),
+        source: 'IT Smeta kalkulyatori'
       });
 
       try {
@@ -361,9 +362,16 @@ export const PricingPage = ({ onOpenConsultation }) => {
                 <button
                   type="submit"
                   disabled={itSubmitting}
-                  className="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-950 bg-gradient-to-r from-cyan-400 to-indigo-300 hover:from-cyan-300 hover:to-indigo-200 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 disabled:opacity-50 cursor-pointer"
+                  className="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-950 bg-gradient-to-r from-cyan-400 to-indigo-300 hover:from-cyan-300 hover:to-indigo-200 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  {itSubmitting ? t('form_submitting') : t('pricing_it_btn')}
+                  {itSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
+                      <span>{t('form_submitting')}</span>
+                    </>
+                  ) : (
+                    <span>{t('pricing_it_btn')}</span>
+                  )}
                 </button>
               </form>
             )}
