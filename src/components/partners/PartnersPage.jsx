@@ -25,38 +25,43 @@ export const PartnersPage = ({ onOpenConsultation }) => {
         </p>
       </section>
 
-      {/* Infinite Logo Marquee */}
-      <section className="relative w-full overflow-hidden py-8 [mask-image:linear-gradient(to_right,transparent,white_15%,white_85%,transparent)]">
-        <div className="animate-marquee items-center gap-16 sm:gap-24">
+      {/* Infinite Logo Marquee with Frosted Glass Neon Cards */}
+      <section className="relative w-full overflow-hidden py-8 bg-gradient-to-b from-[#0b1021] via-[#111832] to-[#0b1021] border-y border-indigo-950/60 [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-[rgba(99,102,241,0.15)] rounded-full blur-3xl pointer-events-none" />
+        <div className="animate-marquee items-center gap-6 sm:gap-8 px-4">
           {marqueePartners.map((partner, index) => (
             <div
               key={`${partner.id}-${index}`}
-              className="shrink-0 flex items-center justify-center h-20 bg-transparent border-none shadow-none"
+              className="shrink-0 group p-[1.5px] rounded-2xl bg-gradient-to-tr from-[#06B6D4] via-[#6366F1] to-[#8B5CF6] shadow-[0_10px_30px_-5px_rgba(99,102,241,0.35),0_8px_20px_-6px_rgba(6,182,212,0.25)] hover:shadow-[0_15px_40px_rgba(99,102,241,0.55),0_10px_25px_rgba(6,182,212,0.4)] hover:-translate-y-1.5 hover:scale-[1.03] transition-all duration-300"
             >
-              <img
-                src={partner.logo}
-                alt={partner.name}
-                className="max-h-14 sm:max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 filter brightness-110 drop-shadow-md"
-                loading="lazy"
-              />
+              <div className="w-44 sm:w-52 h-24 sm:h-28 rounded-[15px] bg-white/[0.07] backdrop-blur-md flex items-center justify-center p-4">
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="max-h-12 sm:max-h-14 max-w-[82%] object-contain filter brightness-110 drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Clean Transparent Logo Showcase Grid */}
+      {/* Clean Frosted Logo Showcase Grid */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center py-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center py-6">
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="flex items-center justify-center h-20 w-full bg-transparent border-none shadow-none group"
+              className="w-full group p-[1.5px] rounded-2xl bg-gradient-to-tr from-[#06B6D4] via-[#6366F1] to-[#8B5CF6] shadow-[0_10px_30px_-5px_rgba(99,102,241,0.35),0_8px_20px_-6px_rgba(6,182,212,0.25)] hover:shadow-[0_15px_40px_rgba(99,102,241,0.55),0_10px_25px_rgba(6,182,212,0.4)] hover:-translate-y-1.5 hover:scale-[1.03] transition-all duration-300"
             >
-              <img
-                src={partner.logo}
-                alt={partner.name}
-                className="max-h-12 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300 filter brightness-110"
-              />
+              <div className="w-full h-24 sm:h-28 rounded-[15px] bg-white/[0.07] backdrop-blur-md flex items-center justify-center p-4">
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="max-h-12 w-auto object-contain filter brightness-110 drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
             </div>
           ))}
         </div>
