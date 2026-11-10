@@ -32,6 +32,12 @@ export const CMSProvider = ({ children }) => {
               ...item
             }))
           },
+          partners: (parsed.partners || INITIAL_CMS_DATA.partners).map((item, idx) => {
+            if (!item.logo || item.logo.includes('unsplash.com')) {
+              return INITIAL_CMS_DATA.partners[idx] || item;
+            }
+            return item;
+          }),
           contact: {
             ...INITIAL_CMS_DATA.contact,
             ...(parsed.contact || {})

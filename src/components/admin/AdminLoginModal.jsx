@@ -5,10 +5,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ProxLogo } from '../common/ProxLogo';
 
 export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
-  const { login, loginAsDemo } = useAuth();
+  const { login } = useAuth();
   const { t } = useLanguage();
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('prox2026');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   if (!isOpen) return null;
@@ -21,14 +21,9 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
       if (onSuccess) onSuccess();
       onClose();
     } else {
-      setError(res.error);
+      setError(res.error || "Login yoki parol noto'g'ri! Kirish cheklangan.");
+      setPassword('');
     }
-  };
-
-  const handleDemo = (role) => {
-    loginAsDemo(role);
-    if (onSuccess) onSuccess();
-    onClose();
   };
 
   return (
@@ -57,31 +52,6 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
           </p>
         </div>
 
-        {/* Demo Fast Login Buttons */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 mb-6 space-y-2.5">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-            Tezkor testlash (1-klik orqali kirish):
-          </span>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleDemo('admin')}
-              className="py-2.5 px-3 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-            >
-              <Shield className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Admin (To'liq)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDemo('editor')}
-              className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-            >
-              <User className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Kontent-menejer</span>
-            </button>
-          </div>
-        </div>
-
         {error && (
           <div className="p-3 mb-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
             {error}
@@ -91,7 +61,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-slate-300 mb-1">
-              Login (admin yoki editor):
+              Login:
             </label>
             <div className="relative">
               <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -100,6 +70,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                placeholder="Foydalanuvchi nomi"
                 className="w-full bg-slate-950/70 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
               />
             </div>
@@ -116,6 +87,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
                 className="w-full bg-slate-950/70 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
               />
             </div>

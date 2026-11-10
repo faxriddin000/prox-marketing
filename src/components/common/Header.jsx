@@ -198,23 +198,8 @@ export const Header = ({
             </button>
           ))}
 
-          {/* Mobile Admin & CTA Buttons */}
+          {/* Mobile CTA Button */}
           <div className="pt-3 border-t border-slate-800/80 flex flex-col gap-2">
-            <button
-              onClick={() => {
-                if (isAuthenticated) {
-                  onViewChange('admin');
-                } else {
-                  onOpenAdminLogin();
-                }
-                setMobileMenuOpen(false);
-              }}
-              className="w-full py-2.5 px-4 rounded-xl text-sm font-medium bg-slate-900 text-indigo-300 border border-indigo-500/30 flex items-center justify-center gap-2"
-            >
-              <Shield className="w-4 h-4 text-indigo-400" />
-              <span>Admin Panel {isAuthenticated ? `(${currentUser?.role})` : ''}</span>
-            </button>
-
             <button
               onClick={() => {
                 setMobileMenuOpen(false);

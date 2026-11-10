@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRight, Sparkles, TrendingUp, CheckCircle, BarChart3,
-  Share2, Code2, Layers, Bot, Zap, Star, Image as ImageIcon
+  Share2, Code2, Bot, Zap, Image as ImageIcon
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
+import { SmmHeroVisual, MarketingHeroVisual, ItHeroVisual } from './HeroDirectionVisuals';
 import { UnifiedGrowthGraphic } from './UnifiedGrowthGraphic';
 
 export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory }) => {
@@ -12,29 +13,72 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
   const { data, updateHero } = useCMS();
   const hero = data.hero || {};
 
+  // Active direction state: 'smm' | 'marketing' | 'it'
+  const [activeDirection, setActiveDirection] = useState('smm');
+
   const currentBadge = hero.badge?.[language] || hero.badge?.uz || 'Raqamli marketing & IT ekotizimi';
   const currentTitle = hero.title?.[language] || hero.title?.uz || 'Biznesingizni tizimli rivojlantiring va sotuvlarni oshiring';
-  const currentSubtitle = hero.subtitle?.[language] || hero.subtitle?.uz || 'Strategik SMM, maqsadli reklama va IT yechimlarini yagona o\'sish tizimiga birlashtiramiz.';
   const currentCta = hero.ctaButton?.[language] || hero.ctaButton?.uz || t('hero_consult_btn');
   const currentSecondary = hero.secondaryButton?.[language] || hero.secondaryButton?.uz || t('hero_services_btn');
 
-  const handlePillarClick = (catId) => {
-    if (onSelectCategory) {
-      onSelectCategory(catId);
+  // Direction-specific dynamic copy
+  const directionCopy = {
+    smm: {
+      titleUz: "SMM Xizmatlari",
+      titleRu: "SMM Услуги",
+      subUz: "Viral reels, kreativ kontent va brend obro'sini oshirish orqali maqsadli auditoriyani faol xaridorga aylantiramiz.",
+      subRu: "Вирусные Reels, креативный контент и рост узнаваемости бренда для превращения целевой аудитории в постоянных клиентов.",
+      color: "pink",
+    },
+    marketing: {
+      titleUz: "Marketing & Target",
+      titleRu: "Маркетинг & Таргет",
+      subUz: "Meta Ads, Google va Yandex orqali aniq maqsadli auditoriyaga chiqamiz va kafolatlangan yuqori ROI ta'minlaymiz.",
+      subRu: "Таргетированная реклама в Meta, Google и Яндекс с точным попаданием в целевую аудиторию и высоким ROI.",
+      color: "indigo",
+    },
+    it: {
+      titleUz: "IT & Avtomatlashtirish",
+      titleRu: "IT & Автоматизация",
+      subUz: "Yuqori tezlikdagi zamonaviy veb-saytlar, Telegram botlar va CRM avtomatlashtirish orqali biznesingizni raqamlashtiramiz.",
+      subRu: "Быстрые современные веб-сайты, Telegram-боты и CRM-автоматизация для цифровизации процессов и роста продаж.",
+      color: "cyan",
     }
-    onViewChange('services');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const currentActiveCopy = directionCopy[activeDirection] || directionCopy.smm;
+  const dynamicSubtitle = language === 'ru' ? currentActiveCopy.subRu : currentActiveCopy.subUz;
+
+  // Render matching visual component
+  const renderVisual = () => {
+    switch (activeDirection) {
+      case 'marketing':
+        return <MarketingHeroVisual />;
+      case 'it':
+        return <ItHeroVisual />;
+      case 'smm':
+      default:
+        return <SmmHeroVisual />;
+    }
   };
 
   return (
     <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
-      {/* Background radial orbs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Dynamic Background Atmosphere Glow matching active tab */}
+      <div
+        className={`absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full blur-[150px] pointer-events-none transition-all duration-700 ${
+          activeDirection === 'smm'
+            ? 'bg-pink-600/15'
+            : activeDirection === 'marketing'
+            ? 'bg-indigo-600/20'
+            : 'bg-cyan-500/15'
+        }`}
+      />
+      <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left Column: Headline, Pillars & Action */}
+          {/* Left Column: Headline, Interactive Tabs & Action */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             {/* Animated Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold backdrop-blur-md">
@@ -47,37 +91,65 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
               <span className="block">{currentTitle}</span>
             </h1>
 
-            {/* Instant Value Proposition Service Pillars */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
-              <button
-                onClick={() => handlePillarClick('smm')}
-                className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-pink-950/40 border border-slate-800 hover:border-pink-500/40 text-xs text-slate-200 transition-all cursor-pointer shadow-sm"
-              >
-                <span className="w-2 h-2 rounded-full bg-pink-500 group-hover:scale-125 transition-transform" />
-                <span className="font-semibold">{t('hero_pillar_smm')}</span>
-              </button>
+            {/* Interactive Direction Tabs / Buttons */}
+            <div className="pt-1">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
+                {language === 'ru' ? 'Выберите направление для обзора:' : 'Yo\'nalishni tanlang va natijani ko\'ring:'}
+              </p>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+                {/* 1. SMM Tab */}
+                <button
+                  type="button"
+                  onClick={() => setActiveDirection('smm')}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    activeDirection === 'smm'
+                      ? 'bg-pink-600/20 text-pink-300 border-2 border-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.35)] scale-105'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-pink-500/40'
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${activeDirection === 'smm' ? 'bg-pink-400 animate-ping' : 'bg-pink-500'}`} />
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>{language === 'ru' ? 'SMM Услуги' : 'SMM Xizmatlari'}</span>
+                </button>
 
-              <button
-                onClick={() => handlePillarClick('marketing')}
-                className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-indigo-950/40 border border-slate-800 hover:border-indigo-500/40 text-xs text-slate-200 transition-all cursor-pointer shadow-sm"
-              >
-                <span className="w-2 h-2 rounded-full bg-indigo-500 group-hover:scale-125 transition-transform" />
-                <span className="font-semibold">{t('hero_pillar_mkt')}</span>
-              </button>
+                {/* 2. Marketing Tab */}
+                <button
+                  type="button"
+                  onClick={() => setActiveDirection('marketing')}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    activeDirection === 'marketing'
+                      ? 'bg-indigo-600/25 text-indigo-300 border-2 border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.35)] scale-105'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-indigo-500/40'
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${activeDirection === 'marketing' ? 'bg-indigo-400 animate-ping' : 'bg-indigo-500'}`} />
+                  <BarChart3 className="w-3.5 h-3.5" />
+                  <span>{language === 'ru' ? 'Маркетинг & Таргет' : 'Marketing & Target'}</span>
+                </button>
 
-              <button
-                onClick={() => handlePillarClick('it')}
-                className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-xs text-slate-200 transition-all cursor-pointer shadow-sm"
-              >
-                <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:scale-125 transition-transform" />
-                <span className="font-semibold">{t('hero_pillar_it')}</span>
-              </button>
+                {/* 3. IT Tab */}
+                <button
+                  type="button"
+                  onClick={() => setActiveDirection('it')}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    activeDirection === 'it'
+                      ? 'bg-cyan-500/20 text-cyan-300 border-2 border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.35)] scale-105'
+                      : 'bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-cyan-500/40'
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${activeDirection === 'it' ? 'bg-cyan-300 animate-ping' : 'bg-cyan-400'}`} />
+                  <Code2 className="w-3.5 h-3.5" />
+                  <span>{language === 'ru' ? 'IT & Автоматизация' : 'IT & Avtomatlashtirish'}</span>
+                </button>
+              </div>
             </div>
 
-            {/* Subtitle */}
-            <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              {currentSubtitle}
-            </p>
+            {/* Dynamic Direction Description */}
+            <div className="min-h-[56px] flex items-center justify-center lg:justify-start">
+              <p className="text-sm sm:text-base text-slate-300 max-w-2xl font-normal leading-relaxed transition-all duration-300">
+                {dynamicSubtitle}
+              </p>
+            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
@@ -90,7 +162,10 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
               </button>
 
               <button
-                onClick={() => onViewChange('services')}
+                onClick={() => {
+                  if (onSelectCategory) onSelectCategory(activeDirection);
+                  onViewChange('services');
+                }}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-slate-600 font-semibold text-sm transition-all cursor-pointer"
               >
                 <span>{currentSecondary}</span>
@@ -114,9 +189,9 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
             </div>
           </div>
 
-          {/* Right Column: Unified 3-Direction Growth Graphic or Dynamic Custom Banner Image */}
+          {/* Right Column: Direction-specific Visual Asset OR Dynamic Custom Banner Image */}
           <div className="lg:col-span-5 relative">
-            {/* Quick Toggle for Banner / 3D Graphic */}
+            {/* Quick Toggle for Banner / Interactive Direction Mode */}
             {hero.bannerImage && hero.bannerImage.trim() !== '' && (
               <div className="flex justify-end mb-2">
                 <button
@@ -128,7 +203,7 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
                   <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
                   <span>
                     {hero.useCustomImage
-                      ? (language === 'ru' ? 'Показать 3D графику' : '3D grafikani ko\'rish')
+                      ? (language === 'ru' ? 'Интерактивный обзор' : 'Interaktiv ko\'rish')
                       : (language === 'ru' ? 'Показать баннер' : 'Maxsus rasmni ko\'rish')}
                   </span>
                 </button>
@@ -144,7 +219,6 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
                     alt="Prox Marketing Growth Banner"
                     className="w-full h-auto object-cover max-h-[460px] rounded-[22px] group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      // Fallback if URL is invalid
                       e.target.style.display = 'none';
                     }}
                   />
@@ -156,15 +230,15 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
                 </div>
               </div>
             ) : (
-              /* Modern Dynamic 3D/SVG Unified Growth Engine Illustration */
-              <UnifiedGrowthGraphic />
+              /* Dynamic Direction Visual Asset matching selected tab */
+              renderVisual()
             )}
           </div>
         </div>
 
         {/* Stats Row */}
         <div className="mt-14 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {hero.stats.map((stat, idx) => (
+          {hero.stats?.map((stat, idx) => (
             <div
               key={idx}
               className="bg-slate-900/50 hover:bg-slate-900/80 border border-slate-800/80 hover:border-slate-700 rounded-2xl p-5 text-center transition-all duration-300"

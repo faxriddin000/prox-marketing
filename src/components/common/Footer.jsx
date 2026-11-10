@@ -199,14 +199,6 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
             <span className="text-slate-400 font-mono text-[11px]">
               {t('footer_planned_domain')}
             </span>
-            <span className="text-slate-700">|</span>
-            <button
-              onClick={onOpenAdminLogin}
-              className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>{t('footer_admin_link')}</span>
-            </button>
           </div>
         </div>
       </div>

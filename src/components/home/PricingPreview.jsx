@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight, Zap, Check } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
@@ -34,6 +34,10 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
             const period =
               plan[`period${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
               plan.periodUz;
+            const features =
+              plan[`features${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
+              plan.featuresUz ||
+              [];
 
             const oldPrice =
               plan.oldPrice ||
@@ -65,12 +69,22 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
                   </div>
 
                   {/* Active Price */}
-                  <div className="flex items-baseline gap-1 mb-6">
+                  <div className="flex items-baseline gap-1 mb-5">
                     <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
                       {plan.price}
                     </span>
                     <span className="text-xs text-slate-400 font-medium">{period}</span>
                   </div>
+
+                  {/* Included features list */}
+                  <ul className="space-y-2.5 mb-6">
+                    {features.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2 text-xs text-slate-300">
+                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                        <span className="leading-snug">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* Gradient CTA "Buyurtma berish" button */}

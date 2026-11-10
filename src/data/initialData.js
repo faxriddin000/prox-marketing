@@ -568,51 +568,51 @@ export const INITIAL_CMS_DATA = {
   partners: [
     {
       id: "partner-1",
-      name: "Apex Retail",
-      industryUz: "Savdo va Retail",
-      industryRu: "Ритейл и торговля",
-      industryEn: "Retail & Commerce",
-      logo: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?auto=format&fit=crop&w=200&h=80&q=80"
-    },
-    {
-      id: "partner-2",
-      name: "Nova Tech Solutions",
-      industryUz: "IT va Telekom",
-      industryRu: "IT и телеком",
-      industryEn: "IT & Telecom",
-      logo: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=200&h=80&q=80"
-    },
-    {
-      id: "partner-3",
       name: "SilkRoad Logistics",
       industryUz: "Logistika va Transport",
       industryRu: "Логистика и транспорт",
       industryEn: "Logistics & Freight",
-      logo: "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=200&h=80&q=80"
+      logo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none'><rect width='240' height='70' rx='14' fill='%230f172a'/><path d='M28 45L44 22H68L52 45H28Z' fill='%236366F1'/><path d='M48 45L64 22H78L62 45H48Z' fill='%2306B6D4'/><circle cx='68' cy='22' r='4' fill='%2338BDF8'/><text x='88' y='36' font-family='system-ui, sans-serif' font-weight='800' font-size='15' fill='%23FFFFFF' letter-spacing='0.5'>SILKROAD</text><text x='88' y='50' font-family='system-ui, sans-serif' font-weight='600' font-size='10' fill='%2338BDF8' letter-spacing='2'>LOGISTICS</text></svg>"
     },
     {
-      id: "partner-4",
+      id: "partner-2",
       name: "Tashkent Grand Clinic",
       industryUz: "Tibbiyot va Salomatlik",
       industryRu: "Медицина и здоровье",
       industryEn: "Healthcare & Clinic",
-      logo: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=200&h=80&q=80"
+      logo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none'><rect width='240' height='70' rx='14' fill='%230f172a'/><rect x='36' y='22' width='8' height='24' rx='3' fill='%2310B981'/><rect x='28' y='30' width='24' height='8' rx='3' fill='%2310B981'/><circle cx='40' cy='34' r='18' stroke='%2334D399' stroke-width='2' stroke-dasharray='4 2'/><text x='74' y='35' font-family='system-ui, sans-serif' font-weight='800' font-size='14' fill='%23FFFFFF'>TASHKENT</text><text x='74' y='50' font-family='system-ui, sans-serif' font-weight='600' font-size='10' fill='%2334D399' letter-spacing='1.5'>GRAND CLINIC</text></svg>"
     },
     {
-      id: "partner-5",
+      id: "partner-3",
       name: "Prestige Real Estate",
       industryUz: "Ko'chmas mulk",
       industryRu: "Недвижимость",
       industryEn: "Real Estate",
-      logo: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=200&h=80&q=80"
+      logo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none'><rect width='240' height='70' rx='14' fill='%230f172a'/><path d='M28 46V30L40 20L52 30V46H44V34H36V46H28Z' fill='%23F59E0B'/><path d='M44 26L56 16L68 26V46H60V34H52' stroke='%23FBBF24' stroke-width='2' fill='none'/><text x='78' y='35' font-family='system-ui, sans-serif' font-weight='800' font-size='14' fill='%23FFFFFF'>PRESTIGE</text><text x='78' y='50' font-family='system-ui, sans-serif' font-weight='600' font-size='10' fill='%23F59E0B' letter-spacing='1.5'>REAL ESTATE</text></svg>"
     },
     {
-      id: "partner-6",
+      id: "partner-4",
       name: "Orient Food Group",
       industryUz: "Restoran va HoReCa",
       industryRu: "Рестораны и HoReCa",
       industryEn: "Restaurants & HoReCa",
-      logo: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200&h=80&q=80"
+      logo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none'><rect width='240' height='70' rx='14' fill='%230f172a'/><circle cx='44' cy='35' r='16' stroke='%23F97316' stroke-width='2.5'/><path d='M44 23V47M36 29C36 35 44 38 44 47M52 29C52 35 44 38 44 47' stroke='%23FB923C' stroke-width='2' stroke-linecap='round'/><text x='74' y='35' font-family='system-ui, sans-serif' font-weight='800' font-size='14' fill='%23FFFFFF'>ORIENT</text><text x='74' y='50' font-family='system-ui, sans-serif' font-weight='600' font-size='10' fill='%23FB923C' letter-spacing='1.5'>FOOD GROUP</text></svg>"
+    },
+    {
+      id: "partner-5",
+      name: "Apex Retail",
+      industryUz: "Savdo va Retail",
+      industryRu: "Ритейл и торговля",
+      industryEn: "Retail & Commerce",
+      logo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none'><rect width='240' height='70' rx='14' fill='%230f172a'/><path d='M42 18L58 46H48L42 34L36 46H26L42 18Z' fill='%23A855F7'/><circle cx='42' cy='29' r='3' fill='%23C084FC'/><text x='74' y='35' font-family='system-ui, sans-serif' font-weight='800' font-size='16' fill='%23FFFFFF'>APEX</text><text x='74' y='50' font-family='system-ui, sans-serif' font-weight='600' font-size='10' fill='%23C084FC' letter-spacing='2'>RETAIL</text></svg>"
+    },
+    {
+      id: "partner-6",
+      name: "Nova Tech Solutions",
+      industryUz: "IT va Telekom",
+      industryRu: "IT и телеком",
+      industryEn: "IT & Telecom",
+      logo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 70' fill='none'><rect width='240' height='70' rx='14' fill='%230f172a'/><polygon points='42,20 56,28 56,44 42,52 28,44 28,28' stroke='%2306B6D4' stroke-width='2' fill='none'/><circle cx='42' cy='36' r='5' fill='%2338BDF8'/><line x1='42' y1='20' x2='42' y2='31' stroke='%2306B6D4' stroke-width='2'/><line x1='28' y1='44' x2='38' y2='38' stroke='%2306B6D4' stroke-width='2'/><line x1='56' y1='44' x2='46' y2='38' stroke='%2306B6D4' stroke-width='2'/><text x='72' y='35' font-family='system-ui, sans-serif' font-weight='800' font-size='14' fill='%23FFFFFF'>NOVA TECH</text><text x='72' y='50' font-family='system-ui, sans-serif' font-weight='600' font-size='10' fill='%2338BDF8' letter-spacing='1.5'>SOLUTIONS</text></svg>"
     }
   ],
 
