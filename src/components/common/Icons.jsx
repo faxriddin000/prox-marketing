@@ -32,3 +32,6 @@ export const TelegramIcon = ({ className = "w-5 h-5", ...props }) => (
     <path d="M22 2 11 13" />
   </svg>
 );
+
+export { ProxLogo } from './ProxLogo';
+

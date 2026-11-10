@@ -3,6 +3,7 @@ import { Menu, X, Shield, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 import { useAuth } from '../../context/AuthContext';
+import { ProxLogo } from './ProxLogo';
 
 export const Header = ({
   currentView,
@@ -58,28 +59,10 @@ export const Header = ({
           {/* Brand Logo */}
           <div
             onClick={() => handleNavClick('home')}
-            className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
+            className="cursor-pointer group select-none shrink-0"
+            title="Prox Marketing Agency"
           >
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 group-hover:scale-105 transition-all">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-cyan-300 text-lg tracking-wider">
-                  PX
-                </span>
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white group-hover:text-indigo-300 transition-colors">
-                  PROX
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  Agency
-                </span>
-              </div>
-              <span className="block text-[10px] text-slate-400 tracking-wider font-mono">
-                proxmarketing.uz
-              </span>
-            </div>
+            <ProxLogo className="h-10 sm:h-11 w-auto transition-transform group-hover:scale-[1.02]" />
           </div>
 
           {/* Desktop Navigation - Clean Click-Only Links */}
@@ -192,6 +175,15 @@ export const Header = ({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-slate-950/98 border-b border-slate-800 px-4 pt-3 pb-6 space-y-2 backdrop-blur-2xl animate-fadeIn max-h-[85vh] overflow-y-auto">
+          {/* Mobile Drawer Brand Logo */}
+          <div
+            onClick={() => handleNavClick('home')}
+            className="pb-3 mb-2 border-b border-slate-800/80 cursor-pointer flex items-center justify-between"
+          >
+            <ProxLogo className="h-9 w-auto" />
+            <span className="text-[10px] text-indigo-400 font-mono">v1.0</span>
+          </div>
+
           {navLinks.map((item) => (
             <button
               key={item.id}

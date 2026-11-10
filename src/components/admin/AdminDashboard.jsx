@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useCMS } from '../../context/CMSContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { testTelegramConnection } from '../../services/telegramService';
+import { ProxLogo } from '../common/ProxLogo';
 
 export const AdminDashboard = ({ onBackToSite }) => {
   const { currentUser, isAdmin, isEditor, logout, canEditPricing, canManageSettings, canDeleteLeads } = useAuth();
@@ -189,18 +190,10 @@ export const AdminDashboard = ({ onBackToSite }) => {
       {/* Top Admin Bar */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-3 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">
-            CMS
-          </div>
-          <div>
-            <h1 className="text-sm font-bold text-white flex items-center gap-2">
-              <span>Prox Marketing Admin</span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isAdmin ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}`}>
-                {isAdmin ? "To'liq Administrator" : "Kontent-menejer"}
-              </span>
-            </h1>
-            <span className="text-[10px] text-slate-400 font-mono">proxmarketing.uz</span>
-          </div>
+          <ProxLogo className="h-8 sm:h-9 w-auto" />
+          <span className={`hidden sm:inline-flex text-[10px] font-bold px-2 py-0.5 rounded-full ${isAdmin ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}`}>
+            {isAdmin ? "To'liq Administrator" : "Kontent-menejer"}
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -243,6 +236,12 @@ export const AdminDashboard = ({ onBackToSite }) => {
       <div className="flex-1 flex flex-col md:flex-row">
         {/* Sidebar */}
         <aside className="w-full md:w-64 bg-slate-900/60 border-r border-slate-800 p-4 shrink-0 space-y-1">
+          <div className="hidden md:flex items-center justify-between pb-3 mb-2 border-b border-slate-800/80 px-2">
+            <ProxLogo className="h-7 w-auto" />
+            <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              CMS
+            </span>
+          </div>
           {[
             { id: 'dashboard', label: 'Umumiy hisobot', icon: LayoutDashboard },
             { id: 'leads', label: `Lidlar / Arizalar (${data.leads?.length || 0})`, icon: Users },

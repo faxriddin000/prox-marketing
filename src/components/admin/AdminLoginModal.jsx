@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Shield, X, Lock, User, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { ProxLogo } from '../common/ProxLogo';
 
 export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
   const { login, loginAsDemo } = useAuth();
@@ -44,11 +45,12 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
         </button>
 
         <div className="text-center mb-6 space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center mx-auto">
-            <Shield className="w-7 h-7" />
+          <div className="flex justify-center mb-3">
+            <ProxLogo className="h-12 w-auto" />
           </div>
-          <h3 className="text-2xl font-bold text-white">
-            {t('admin_login_title')}
+          <h3 className="text-xl font-bold text-white flex items-center justify-center gap-2">
+            <Shield className="w-5 h-5 text-indigo-400" />
+            <span>{t('admin_login_title')}</span>
           </h3>
           <p className="text-xs text-slate-400">
             {t('admin_login_desc')}

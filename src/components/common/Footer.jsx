@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, Send, ShieldCheck, MapPin } from 'lucide-react';
 import { InstagramIcon } from './Icons';
+import { ProxLogo } from './ProxLogo';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
@@ -14,20 +15,8 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800/80">
           {/* Brand Col */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px]">
-                <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-bold text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-cyan-300 text-sm">
-                  PX
-                </div>
-              </div>
-              <div>
-                <span className="font-extrabold text-white text-lg tracking-tight">
-                  PROX MARKETING
-                </span>
-                <span className="block text-[11px] text-indigo-400 font-mono">
-                  proxmarketing.uz
-                </span>
-              </div>
+            <div>
+              <ProxLogo className="h-11 w-auto" />
             </div>
             <p className="text-xs leading-relaxed text-slate-400">
               {t('footer_tagline')}
