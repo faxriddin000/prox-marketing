@@ -5,19 +5,19 @@ export const INITIAL_CMS_DATA = {
   // Hero Banner Settings
   hero: {
     badge: {
-      uz: "Raqamli marketing va IT yechimlari",
-      ru: "Digital-маркетинг и IT-решения",
-      en: "Digital Marketing & IT Solutions"
+      uz: "Raqamli marketing & IT ekotizimi",
+      ru: "Digital-маркетинг & IT экосистема",
+      en: "Digital Marketing & IT Ecosystem"
     },
     title: {
-      uz: "Biznesingizni raqamli dunyoda tizimli rivojlantiring va sotuvlarni oshiring",
-      ru: "Системно развивайте бизнес в цифровом мире и увеличивайте продажи",
-      en: "Systematically grow your business in the digital world and scale sales"
+      uz: "Biznesingizni tizimli rivojlantiring va sotuvlarni oshiring",
+      ru: "Системное развитие бизнеса и масштабирование продаж",
+      en: "Systematic business growth & scaling sales"
     },
     subtitle: {
-      uz: "Prox Marketing Agency — strategik SMM, maqsadli reklama, brending va zamonaviy avtomatlashtirish orqali brendingizni yangi bosqichga olib chiqadi.",
-      ru: "Prox Marketing Agency — выводит ваш бренд на новый уровень с помощью стратегического SMM, таргетированной рекламы, брендинга и современной автоматизации.",
-      en: "Prox Marketing Agency — takes your brand to the next level through strategic SMM, targeted advertising, branding, and modern automation."
+      uz: "Strategik SMM, maqsadli reklama va IT yechimlarini yagona o'sish mexanizmiga birlashtiramiz.",
+      ru: "Объединяем стратегический SMM, таргет и современные IT-решения в единую систему роста.",
+      en: "Unifying strategic SMM, performance advertising, and modern IT into a single growth engine."
     },
     ctaButton: {
       uz: "Bepul konsultatsiya olish",
@@ -29,7 +29,8 @@ export const INITIAL_CMS_DATA = {
       ru: "Ознакомиться с услугами",
       en: "Explore Services"
     },
-    bannerImage: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80",
+    bannerImage: "",
+    useCustomImage: false,
     stats: [
       {
         value: "50+",
@@ -322,6 +323,10 @@ export const INITIAL_CMS_DATA = {
         durationRu: "1 месяц",
         durationEn: "1 Month",
         price: "$1500",
+        oldPrice: "$1800",
+        discountBadgeUz: "-17% FOYDA",
+        discountBadgeRu: "-17% СКИДКА",
+        discountBadgeEn: "-17% OFF",
         periodUz: "/ oy",
         periodRu: "/ мес",
         periodEn: "/ mo",
@@ -353,6 +358,10 @@ export const INITIAL_CMS_DATA = {
         durationRu: "Пакет на 3 месяца",
         durationEn: "3 Months Package",
         price: "$1350",
+        oldPrice: "$1700",
+        discountBadgeUz: "-20% CHEGIRMA",
+        discountBadgeRu: "-20% ЭКОНОМИЯ",
+        discountBadgeEn: "-20% SAVINGS",
         periodUz: "/ oy",
         periodRu: "/ мес",
         periodEn: "/ mo",
@@ -384,6 +393,10 @@ export const INITIAL_CMS_DATA = {
         durationRu: "Пакет на 6 месяцев",
         durationEn: "6 Months Package",
         price: "$1200",
+        oldPrice: "$1600",
+        discountBadgeUz: "-25% FOYDA",
+        discountBadgeRu: "-25% ВЫГОДА",
+        discountBadgeEn: "-25% VALUE",
         periodUz: "/ oy",
         periodRu: "/ мес",
         periodEn: "/ mo",
@@ -415,6 +428,10 @@ export const INITIAL_CMS_DATA = {
         durationRu: "Пакет на 12 месяцев (1 год)",
         durationEn: "12 Months (1 Year) Package",
         price: "$1000",
+        oldPrice: "$1500",
+        discountBadgeUz: "-33% ENG KATTA CHEGIRMA",
+        discountBadgeRu: "-33% МАКСИМАЛЬНАЯ СКИДКА",
+        discountBadgeEn: "-33% BEST VALUE",
         periodUz: "/ oy",
         periodRu: "/ мес",
         periodEn: "/ mo",

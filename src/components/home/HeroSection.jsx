@@ -1,20 +1,21 @@
 import React from 'react';
 import {
   ArrowRight, Sparkles, TrendingUp, CheckCircle, BarChart3,
-  Share2, Code2, Layers, Bot, Zap, Star
+  Share2, Code2, Layers, Bot, Zap, Star, Image as ImageIcon
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
+import { UnifiedGrowthGraphic } from './UnifiedGrowthGraphic';
 
 export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory }) => {
   const { language, t } = useLanguage();
-  const { data } = useCMS();
-  const hero = data.hero;
+  const { data, updateHero } = useCMS();
+  const hero = data.hero || {};
 
-  const currentBadge = hero.badge[language] || hero.badge.uz;
-  const currentTitle = hero.title[language] || hero.title.uz;
-  const currentSubtitle = hero.subtitle[language] || hero.subtitle.uz;
-  const currentCta = hero.ctaButton[language] || hero.ctaButton.uz;
+  const currentBadge = hero.badge?.[language] || hero.badge?.uz || 'Raqamli marketing & IT ekotizimi';
+  const currentTitle = hero.title?.[language] || hero.title?.uz || 'Biznesingizni tizimli rivojlantiring va sotuvlarni oshiring';
+  const currentSubtitle = hero.subtitle?.[language] || hero.subtitle?.uz || 'Strategik SMM, maqsadli reklama va IT yechimlarini yagona o\'sish tizimiga birlashtiramiz.';
+  const currentCta = hero.ctaButton?.[language] || hero.ctaButton?.uz || t('hero_consult_btn');
   const currentSecondary = hero.secondaryButton?.[language] || hero.secondaryButton?.uz || t('hero_services_btn');
 
   const handlePillarClick = (catId) => {
@@ -113,106 +114,51 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
             </div>
           </div>
 
-          {/* Right Column: Clean Non-Overlapping Interactive Agency Showcase Dashboard */}
+          {/* Right Column: Unified 3-Direction Growth Graphic or Dynamic Custom Banner Image */}
           <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div className="rounded-3xl bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950 p-5 sm:p-6 border border-slate-800 shadow-2xl backdrop-blur-xl space-y-4">
-                {/* Agency Live Dashboard Header */}
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-bold text-xs border border-indigo-500/30">
-                      PX
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white leading-tight">
-                        Prox Growth Engine
-                      </h4>
-                      <p className="text-[10px] text-slate-400">
-                        {language === 'ru' ? 'Системное масштабирование' : 'Tizimli rivojlanish'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span className="text-[10px] font-bold text-emerald-400">LIVE</span>
-                  </div>
-                </div>
-
-                {/* Grid 1: SMM Performance Card */}
-                <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-pink-500/15 text-pink-400 border border-pink-500/20 flex items-center justify-center shrink-0">
-                      <Share2 className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
-                        SMM & Virallik
-                      </span>
-                      <span className="text-sm font-extrabold text-white">
-                        +320% {language === 'ru' ? 'Рост продаж' : "Sotuv o'sishi"}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">
-                    450k+
+            {/* Quick Toggle for Banner / 3D Graphic */}
+            {hero.bannerImage && hero.bannerImage.trim() !== '' && (
+              <div className="flex justify-end mb-2">
+                <button
+                  type="button"
+                  onClick={() => updateHero({ useCustomImage: !hero.useCustomImage })}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-indigo-300 border border-indigo-500/30 transition-all shadow-md cursor-pointer"
+                  title="Grafika va rasm o'rtasida almashish"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>
+                    {hero.useCustomImage
+                      ? (language === 'ru' ? 'Показать 3D графику' : '3D grafikani ko\'rish')
+                      : (language === 'ru' ? 'Показать баннер' : 'Maxsus rasmni ko\'rish')}
                   </span>
-                </div>
+                </button>
+              </div>
+            )}
 
-                {/* Grid 2: Target Ads ROI Card */}
-                <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 flex items-center justify-center shrink-0">
-                      <BarChart3 className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
-                        Target & Ads
-                      </span>
-                      <span className="text-sm font-extrabold text-white">
-                        5.4x {language === 'ru' ? 'Средний ROI' : "O'rtacha ROI"}
-                      </span>
-                    </div>
+            {hero.useCustomImage && hero.bannerImage && hero.bannerImage.trim() !== '' ? (
+              /* Custom Banner Image from CMS with Glassmorphic Neon Frame */
+              <div className="relative group rounded-3xl p-[1.5px] bg-gradient-to-tr from-[#06B6D4] via-[#6366F1] to-[#8B5CF6] shadow-[0_20px_50px_rgba(99,102,241,0.35)] animate-fadeIn">
+                <div className="relative rounded-[22px] overflow-hidden bg-slate-950/90 backdrop-blur-xl">
+                  <img
+                    src={hero.bannerImage}
+                    alt="Prox Marketing Growth Banner"
+                    className="w-full h-auto object-cover max-h-[460px] rounded-[22px] group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      // Fallback if URL is invalid
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-white bg-slate-900/80 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/60">
+                    <span className="font-bold text-cyan-300">Prox Growth Engine</span>
+                    <span className="font-mono text-[10px] text-slate-300">proxmarketing.uz</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
-                    Google & Meta
-                  </span>
-                </div>
-
-                {/* Grid 3: IT & AI Automation Card */}
-                <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/20 flex items-center justify-center shrink-0">
-                      <Bot className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
-                        IT & Sun'iy Intellekt
-                      </span>
-                      <span className="text-sm font-extrabold text-white">
-                        {language === 'ru' ? '100% Автоматизация' : "100% Avtomatlashtirish"}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
-                    Web + Bot
-                  </span>
-                </div>
-
-                {/* Bottom Trust Stat */}
-                <div className="pt-2 flex items-center justify-between text-xs text-slate-400 px-1">
-                  <div className="flex items-center gap-1.5">
-                    <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                    <span className="font-bold text-white">5.0</span>
-                    <span className="text-[11px] text-slate-400">
-                      ({language === 'ru' ? 'Рейтинг качества' : 'Sifat ko\'rsatkichi'})
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-indigo-400 font-semibold">
-                    proxmarketing.uz
-                  </span>
                 </div>
               </div>
-            </div>
+            ) : (
+              /* Modern Dynamic 3D/SVG Unified Growth Engine Illustration */
+              <UnifiedGrowthGraphic />
+            )}
           </div>
         </div>
 

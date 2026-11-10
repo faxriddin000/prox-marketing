@@ -25,42 +25,48 @@ export const PartnersPage = ({ onOpenConsultation }) => {
         </p>
       </section>
 
-      {/* Infinite Logo Marquee with Frosted Glass Neon Cards */}
+      {/* Infinite Logo Marquee with Harmonized Dark Glassmorphic Cards */}
       <section className="relative w-full overflow-hidden py-8 bg-gradient-to-b from-[#0b1021] via-[#111832] to-[#0b1021] border-y border-indigo-950/60 [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-[rgba(99,102,241,0.15)] rounded-full blur-3xl pointer-events-none" />
         <div className="animate-marquee items-center gap-6 sm:gap-8 px-4">
           {marqueePartners.map((partner, index) => (
             <div
               key={`${partner.id}-${index}`}
-              className="shrink-0 group p-[1.5px] rounded-2xl bg-gradient-to-tr from-[#06B6D4] via-[#6366F1] to-[#8B5CF6] shadow-[0_10px_30px_-5px_rgba(99,102,241,0.35),0_8px_20px_-6px_rgba(6,182,212,0.25)] hover:shadow-[0_15px_40px_rgba(99,102,241,0.55),0_10px_25px_rgba(6,182,212,0.4)] hover:-translate-y-1.5 hover:scale-[1.03] transition-all duration-300"
+              className="shrink-0 group p-[1.5px] rounded-2xl bg-gradient-to-tr from-[#4F46E5]/40 via-indigo-500/20 to-[#06B6D4]/40 hover:from-[#4F46E5] hover:to-[#06B6D4] shadow-[0_8px_25px_-5px_rgba(79,70,229,0.25),0_4px_12px_-4px_rgba(6,182,212,0.15)] hover:shadow-[0_12px_35px_rgba(79,70,229,0.4),0_8px_20px_rgba(6,182,212,0.3)] hover:-translate-y-1.5 hover:scale-[1.03] transition-all duration-300"
             >
-              <div className="w-44 sm:w-52 h-24 sm:h-28 rounded-[15px] bg-white/[0.07] backdrop-blur-md flex items-center justify-center p-4">
+              <div className="w-48 sm:w-56 h-28 sm:h-32 rounded-[15px] bg-slate-900/70 backdrop-blur-md flex flex-col items-center justify-center p-3 text-center border border-white/[0.04]">
                 <img
                   src={partner.logo}
                   alt={partner.name}
-                  className="max-h-12 sm:max-h-14 max-w-[82%] object-contain filter brightness-110 drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  className="max-h-10 sm:max-h-12 max-w-[80%] object-contain filter brightness-110 drop-shadow-md group-hover:scale-105 transition-transform duration-300 mb-2"
                   loading="lazy"
                 />
+                <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors tracking-wide truncate max-w-full px-2">
+                  {partner.name}
+                </span>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Clean Frosted Logo Showcase Grid */}
+      {/* Clean Harmonized Dark Showcase Grid */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center py-6">
           {partners.map((partner) => (
             <div
               key={partner.id}
-              className="w-full group p-[1.5px] rounded-2xl bg-gradient-to-tr from-[#06B6D4] via-[#6366F1] to-[#8B5CF6] shadow-[0_10px_30px_-5px_rgba(99,102,241,0.35),0_8px_20px_-6px_rgba(6,182,212,0.25)] hover:shadow-[0_15px_40px_rgba(99,102,241,0.55),0_10px_25px_rgba(6,182,212,0.4)] hover:-translate-y-1.5 hover:scale-[1.03] transition-all duration-300"
+              className="w-full group p-[1.5px] rounded-2xl bg-gradient-to-tr from-[#4F46E5]/40 via-indigo-500/20 to-[#06B6D4]/40 hover:from-[#4F46E5] hover:to-[#06B6D4] shadow-[0_8px_25px_-5px_rgba(79,70,229,0.25),0_4px_12px_-4px_rgba(6,182,212,0.15)] hover:shadow-[0_12px_35px_rgba(79,70,229,0.4),0_8px_20px_rgba(6,182,212,0.3)] hover:-translate-y-1.5 hover:scale-[1.03] transition-all duration-300"
             >
-              <div className="w-full h-24 sm:h-28 rounded-[15px] bg-white/[0.07] backdrop-blur-md flex items-center justify-center p-4">
+              <div className="w-full h-28 sm:h-32 rounded-[15px] bg-slate-900/70 backdrop-blur-md flex flex-col items-center justify-center p-3 text-center border border-white/[0.04]">
                 <img
                   src={partner.logo}
                   alt={partner.name}
-                  className="max-h-12 w-auto object-contain filter brightness-110 drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                  className="max-h-10 sm:max-h-12 max-w-[80%] object-contain filter brightness-110 drop-shadow-md group-hover:scale-105 transition-transform duration-300 mb-2"
                 />
+                <span className="text-[11px] font-semibold text-slate-300 group-hover:text-white transition-colors tracking-wide truncate max-w-full px-1">
+                  {partner.name}
+                </span>
               </div>
             </div>
           ))}

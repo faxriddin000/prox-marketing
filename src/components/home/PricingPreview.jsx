@@ -25,7 +25,7 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
           </p>
         </div>
 
-        {/* SMM 4 Package Cards (Strict 100% TZ structure, No fabricated discounts or badges) */}
+        {/* SMM 4 Package Cards with Crossed-Out Old Prices & Discount Badges */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {smmTariffs.map((plan) => {
             const duration =
@@ -35,29 +35,51 @@ export const PricingPreview = ({ onViewChange, onOpenConsultation }) => {
               plan[`period${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
               plan.periodUz;
 
+            const oldPrice =
+              plan.oldPrice ||
+              (plan.id === 'smm-pack-1' ? '$1800' : plan.id === 'smm-pack-3' ? '$1700' : plan.id === 'smm-pack-6' ? '$1600' : '$1500');
+
+            const discountBadge =
+              plan[`discountBadge${language.charAt(0).toUpperCase() + language.slice(1)}`] ||
+              plan.discountBadgeUz ||
+              (plan.id === 'smm-pack-1' ? '-17% FOYDA' : plan.id === 'smm-pack-3' ? '-20% CHEGIRMA' : plan.id === 'smm-pack-6' ? '-25% FOYDA' : '-33% ENG KATTA CHEGIRMA');
+
             return (
               <div
                 key={plan.id}
-                className="relative rounded-3xl p-6 bg-slate-900/80 border border-slate-800 hover:border-slate-700 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative rounded-3xl p-6 bg-gradient-to-b from-slate-900/90 to-slate-950/95 border border-slate-800 hover:border-indigo-500/60 flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.35)]"
               >
                 <div>
-                  <h3 className="font-extrabold text-lg text-white mb-4">
+                  <h3 className="font-extrabold text-lg text-white mb-3 group-hover:text-indigo-300 transition-colors">
                     {duration}
                   </h3>
 
+                  {/* Strikethrough Old Price & Eye-Catching Discount Badge */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-semibold text-slate-500 line-through">
+                      {oldPrice}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                      {discountBadge}
+                    </span>
+                  </div>
+
+                  {/* Active Price */}
                   <div className="flex items-baseline gap-1 mb-6">
-                    <span className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                    <span className="text-3xl sm:text-4xl font-black text-white tracking-tight">
                       {plan.price}
                     </span>
                     <span className="text-xs text-slate-400 font-medium">{period}</span>
                   </div>
                 </div>
 
+                {/* Gradient CTA "Buyurtma berish" button */}
                 <button
                   onClick={() => onOpenConsultation(`SMM: ${duration}`)}
-                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white border border-slate-700 hover:border-indigo-500 transition-all cursor-pointer"
+                  className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 active:scale-[0.98] transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  {t('pricing_btn_order')}
+                  <span>{t('pricing_btn_order')}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             );

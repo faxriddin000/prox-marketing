@@ -40,7 +40,8 @@ export const AdminDashboard = ({ onBackToSite }) => {
     badgeRu: data.hero.badge.ru,
     ctaUz: data.hero.ctaButton.uz,
     ctaRu: data.hero.ctaButton.ru,
-    bannerImage: data.hero.bannerImage
+    bannerImage: data.hero.bannerImage || '',
+    useCustomImage: data.hero.useCustomImage ?? Boolean(data.hero.bannerImage && data.hero.bannerImage.trim() !== '')
   });
 
   // Contact state
@@ -98,7 +99,8 @@ export const AdminDashboard = ({ onBackToSite }) => {
       subtitle: { ...data.hero.subtitle, uz: heroForm.subtitleUz, ru: heroForm.subtitleRu },
       badge: { ...data.hero.badge, uz: heroForm.badgeUz, ru: heroForm.badgeRu },
       ctaButton: { ...data.hero.ctaButton, uz: heroForm.ctaUz, ru: heroForm.ctaRu },
-      bannerImage: heroForm.bannerImage
+      bannerImage: heroForm.bannerImage?.trim() || '',
+      useCustomImage: heroForm.useCustomImage && Boolean(heroForm.bannerImage?.trim())
     });
     showNotice("Bosh sahifa banner ma'lumotlari muvaffaqiyatli saqlandi!");
   };
@@ -585,16 +587,65 @@ export const AdminDashboard = ({ onBackToSite }) => {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Banner Rasm URL (Mockup):
-                  </label>
+                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <label className="block text-xs font-semibold text-slate-300">
+                      Banner Rasm URL (Mockup):
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setHeroForm({ ...heroForm, bannerImage: '', useCustomImage: false })}
+                      className="text-[11px] text-cyan-400 hover:text-cyan-300 font-semibold underline self-start sm:self-auto cursor-pointer"
+                    >
+                      Standart 3D grafikaga qaytarish (Tiklash)
+                    </button>
+                  </div>
+
                   <input
                     type="url"
+                    placeholder="https://example.com/banner.png"
                     value={heroForm.bannerImage}
-                    onChange={(e) => setHeroForm({ ...heroForm, bannerImage: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-mono"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setHeroForm({
+                        ...heroForm,
+                        bannerImage: val,
+                        useCustomImage: Boolean(val.trim())
+                      });
+                    }}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-mono placeholder-slate-600 focus:outline-none focus:border-indigo-500"
                   />
+
+                  {/* Toggle custom image vs 3D graphic */}
+                  <div className="flex items-center gap-2 pt-1">
+                    <input
+                      type="checkbox"
+                      id="useCustomImageToggle"
+                      checked={Boolean(heroForm.useCustomImage && heroForm.bannerImage?.trim())}
+                      onChange={(e) => setHeroForm({ ...heroForm, useCustomImage: e.target.checked })}
+                      disabled={!heroForm.bannerImage?.trim()}
+                      className="rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-0 cursor-pointer disabled:opacity-50"
+                    />
+                    <label htmlFor="useCustomImageToggle" className="text-xs text-slate-300 cursor-pointer select-none">
+                      Bosh sahifada ushbu maxsus rasmdan foydalanish ({heroForm.useCustomImage && heroForm.bannerImage?.trim() ? "Faol" : "Standart 3D o'sish grafikasi faol"})
+                    </label>
+                  </div>
+
+                  {/* Thumbnail Preview */}
+                  {heroForm.bannerImage && heroForm.bannerImage.trim() !== '' && (
+                    <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center gap-3">
+                      <img
+                        src={heroForm.bannerImage}
+                        alt="Banner Preview"
+                        className="w-20 h-14 object-cover rounded-lg border border-slate-700 bg-slate-900"
+                        onError={(e) => { e.target.src = 'https://placehold.co/120x80/0f172a/ffffff?text=Xato+URL'; }}
+                      />
+                      <div className="text-[11px] text-slate-400">
+                        <span className="font-semibold text-white block">Rasm ko'rinishi (Preview)</span>
+                        <span>{heroForm.useCustomImage ? "Saytda shu rasm ko'rinadi" : "3D grafika ko'rinadi (rasm zaxirada)"}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <button

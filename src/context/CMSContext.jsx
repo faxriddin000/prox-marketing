@@ -16,13 +16,21 @@ export const CMSProvider = ({ children }) => {
         return {
           ...INITIAL_CMS_DATA,
           ...parsed,
+          hero: {
+            ...INITIAL_CMS_DATA.hero,
+            ...(parsed.hero || {})
+          },
           services: {
             ...INITIAL_CMS_DATA.services,
             ...(parsed.services || {})
           },
           tariffs: {
             ...INITIAL_CMS_DATA.tariffs,
-            ...(parsed.tariffs || {})
+            ...(parsed.tariffs || {}),
+            smm: (parsed.tariffs?.smm || INITIAL_CMS_DATA.tariffs.smm).map((item, idx) => ({
+              ...(INITIAL_CMS_DATA.tariffs.smm[idx] || {}),
+              ...item
+            }))
           },
           contact: {
             ...INITIAL_CMS_DATA.contact,

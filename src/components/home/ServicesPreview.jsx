@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Share2, Code2, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, Share2, BarChart3, Code2, Check, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 
@@ -23,9 +23,23 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
       )
     },
     {
-      id: 'it',
+      id: 'marketing',
       number: '02',
-      title: language === 'ru' ? 'IT Услуги' : 'IT Xizmatlari',
+      title: language === 'ru' ? 'Комплексный Маркетинг' : 'Marketing Xizmatlari',
+      badge: language === 'ru' ? '7 услуг' : '7 ta xizmat',
+      icon: BarChart3,
+      borderGlow: 'hover:border-indigo-500/60 hover:shadow-indigo-500/10',
+      badgeColor: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
+      iconColor: 'bg-gradient-to-br from-indigo-500/20 to-purple-500/10 text-indigo-400 border-indigo-500/30',
+      btnHover: 'hover:bg-indigo-600 hover:border-indigo-500',
+      features: (data.services?.marketing || []).slice(0, 4).map((item) =>
+        item[`title${language.charAt(0).toUpperCase() + language.slice(1)}`] || item.titleUz
+      )
+    },
+    {
+      id: 'it',
+      number: '03',
+      title: language === 'ru' ? 'IT и Автоматизация' : 'IT Xizmatlari',
       badge: language === 'ru' ? '6 услуг' : '6 ta xizmat',
       icon: Code2,
       borderGlow: 'hover:border-cyan-500/60 hover:shadow-cyan-500/10',
@@ -65,14 +79,14 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
           </p>
         </div>
 
-        {/* 2 Clean Flagship Cards Redesigned */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {/* 3 Full-Width Columns Services Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {previewCards.map((card) => {
             const Icon = card.icon;
             return (
               <div
                 key={card.id}
-                className={`group relative rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950/95 border border-slate-800 p-8 flex flex-col justify-between transition-all duration-300 shadow-xl hover:-translate-y-1.5 hover:shadow-2xl ${card.borderGlow}`}
+                className={`group relative rounded-3xl bg-gradient-to-b from-slate-900/90 to-slate-950/95 border border-slate-800 p-7 sm:p-8 flex flex-col justify-between transition-all duration-300 shadow-xl hover:-translate-y-1.5 hover:shadow-2xl ${card.borderGlow}`}
               >
                 <div>
                   {/* Top Bar with Numbered Badge & Elevated Icon */}
@@ -115,21 +129,6 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
               </div>
             );
           })}
-        </div>
-
-        {/* View All Services Link */}
-        <div className="mt-12 text-center">
-          <button
-            onClick={() => {
-              if (onSelectCategory) onSelectCategory('all');
-              onViewChange('services');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer group"
-          >
-            <span>{t('services_view_all_link')}</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
         </div>
       </div>
     </section>
