@@ -22,7 +22,10 @@ export const CMSProvider = ({ children }) => {
           },
           services: {
             ...INITIAL_CMS_DATA.services,
-            ...(parsed.services || {})
+            ...(parsed.services || {}),
+            marketing: (parsed.services?.marketing || INITIAL_CMS_DATA.services.marketing).filter(
+              (item) => item.id !== 'mkt-6' && item.id !== 'mkt-7' && !item.titleUz?.includes("Sotuv bo'limi") && !item.titleUz?.includes("To'liq sotuvni")
+            )
           },
           tariffs: {
             ...INITIAL_CMS_DATA.tariffs,
@@ -166,6 +169,15 @@ export const CMSProvider = ({ children }) => {
     }));
   };
 
+  const updatePartner = (partnerId, updatedFields) => {
+    setData((prev) => ({
+      ...prev,
+      partners: (prev.partners || []).map((p) =>
+        p.id === partnerId ? { ...p, ...updatedFields } : p
+      )
+    }));
+  };
+
   const addPartner = (partnerData) => {
     setData((prev) => ({
       ...prev,
@@ -276,6 +288,7 @@ export const CMSProvider = ({ children }) => {
         deleteServiceItem,
         updateTariffs,
         updatePartners,
+        updatePartner,
         addPartner,
         deletePartner,
         updatePortfolio,

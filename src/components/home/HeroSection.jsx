@@ -189,50 +189,9 @@ export const HeroSection = ({ onOpenConsultation, onViewChange, onSelectCategory
             </div>
           </div>
 
-          {/* Right Column: Direction-specific Visual Asset OR Dynamic Custom Banner Image */}
+          {/* Right Column: Direction-specific Dynamic Visual Asset */}
           <div className="lg:col-span-5 relative">
-            {/* Quick Toggle for Banner / Interactive Direction Mode */}
-            {hero.bannerImage && hero.bannerImage.trim() !== '' && (
-              <div className="flex justify-end mb-2">
-                <button
-                  type="button"
-                  onClick={() => updateHero({ useCustomImage: !hero.useCustomImage })}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-900/90 hover:bg-slate-800 text-indigo-300 border border-indigo-500/30 transition-all shadow-md cursor-pointer"
-                  title="Grafika va rasm o'rtasida almashish"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>
-                    {hero.useCustomImage
-                      ? (language === 'ru' ? 'Интерактивный обзор' : 'Interaktiv ko\'rish')
-                      : (language === 'ru' ? 'Показать баннер' : 'Maxsus rasmni ko\'rish')}
-                  </span>
-                </button>
-              </div>
-            )}
-
-            {hero.useCustomImage && hero.bannerImage && hero.bannerImage.trim() !== '' ? (
-              /* Custom Banner Image from CMS with Glassmorphic Neon Frame */
-              <div className="relative group rounded-3xl p-[1.5px] bg-gradient-to-tr from-[#06B6D4] via-[#6366F1] to-[#8B5CF6] shadow-[0_20px_50px_rgba(99,102,241,0.35)] animate-fadeIn">
-                <div className="relative rounded-[22px] overflow-hidden bg-slate-950/90 backdrop-blur-xl">
-                  <img
-                    src={hero.bannerImage}
-                    alt="Prox Marketing Growth Banner"
-                    className="w-full h-auto object-cover max-h-[460px] rounded-[22px] group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-white bg-slate-900/80 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/60">
-                    <span className="font-bold text-cyan-300">Prox Growth Engine</span>
-                    <span className="font-mono text-[10px] text-slate-300">proxmarketing.uz</span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              /* Dynamic Direction Visual Asset matching selected tab */
-              renderVisual()
-            )}
+            {renderVisual()}
           </div>
         </div>
 

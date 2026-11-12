@@ -228,26 +228,6 @@ export const INITIAL_CMS_DATA = {
         descRu: "Подбор релевантных лидеров мнений и полное ведение рекламных интеграций",
         descEn: "Selecting matching influencers and managing high-converting influencer campaigns",
         icon: "Sparkles"
-      },
-      {
-        id: "mkt-6",
-        titleUz: "Sotuv bo'limi nazorati",
-        titleRu: "Контроль отдела продаж",
-        titleEn: "Sales Department Supervision",
-        descUz: "Sotuvchilarni o'qitish va savdoga tayyorlash",
-        descRu: "Обучение менеджеров по продажам, скрипты и подготовка к эффективным сделкам",
-        descEn: "Training sales representatives, scripting, and preparing the team for closed deals",
-        icon: "UserCheck"
-      },
-      {
-        id: "mkt-7",
-        titleUz: "To'liq sotuvni nazoratga olish",
-        titleRu: "Полный контроль продаж",
-        titleEn: "End-to-End Sales Control",
-        descUz: "Sotuv jarayonlarini boshidan oxirigacha tizimli boshqarish va nazorat qilish",
-        descRu: "Системное сквозное управление и аудит всех этапов воронки продаж",
-        descEn: "Systematic end-to-end sales pipeline management and conversion auditing",
-        icon: "ShieldAlert"
       }
     ],
     it: [

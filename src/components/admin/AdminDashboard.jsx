@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Users, FileText, DollarSign, Image, Briefcase,
   Phone, Send, RotateCcw, LogOut, CheckCircle2, AlertTriangle,
   Plus, Trash2, Edit3, Save, Search, Filter, ExternalLink, Shield,
-  Layers, Lock, Eye, EyeOff, Bot, Sparkles, Building2
+  Layers, Lock, Eye, EyeOff, Bot, Sparkles, Building2, X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCMS } from '../../context/CMSContext';
@@ -16,7 +16,7 @@ export const AdminDashboard = ({ onBackToSite }) => {
   const {
     data, resetToDefaults,
     updateHero, updateAbout, updateServices, updateServiceItem, addServiceItem, deleteServiceItem,
-    updateTariffs, updatePartners, addPartner, deletePartner,
+    updateTariffs, updatePartners, updatePartner, addPartner, deletePartner,
     updatePortfolio, updateTeam, updateContact, updateTelegramSettings,
     updateBlog, updateLeadStatus, deleteLead
   } = useCMS();
@@ -82,6 +82,7 @@ export const AdminDashboard = ({ onBackToSite }) => {
     industryRu: '',
     logo: ''
   });
+  const [editingPartner, setEditingPartner] = useState(null);
 
   // Tariffs editor state
   const [smmPricing, setSmmPricing] = useState(data.tariffs.smm);
@@ -200,15 +201,6 @@ export const AdminDashboard = ({ onBackToSite }) => {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setResetModalOpen(true)}
-            className="text-xs text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Texnik topshiriq standart holatiga qaytarish"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Standart holatga qaytarish</span>
-          </button>
-
-          <button
             onClick={onBackToSite}
             className="text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
           >
@@ -254,8 +246,7 @@ export const AdminDashboard = ({ onBackToSite }) => {
             { id: 'portfolio', label: 'Portfolio / Keyslar', icon: Briefcase },
             { id: 'team', label: "Jamoa a'zolari", icon: Users },
             { id: 'contact', label: 'Aloqa va Xarita', icon: Phone },
-            { id: 'telegram', label: 'Telegram Bot API', icon: Bot, protected: !isAdmin },
-            { id: 'blog', label: 'Blog / Yangiliklar', icon: FileText }
+            { id: 'telegram', label: 'Telegram Bot API', icon: Bot, protected: !isAdmin }
           ].map((item) => {
             const Icon = item.icon;
             return (
@@ -373,7 +364,7 @@ export const AdminDashboard = ({ onBackToSite }) => {
                 </div>
 
                 {/* Filter and Search */}
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-col xl:flex-row xl:items-center gap-3">
                   <div className="relative">
                     <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
                     <input
@@ -381,21 +372,36 @@ export const AdminDashboard = ({ onBackToSite }) => {
                       placeholder="Ism yoki telefon..."
                       value={leadSearch}
                       onChange={(e) => setLeadSearch(e.target.value)}
-                      className="bg-slate-900 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                      className="bg-slate-900 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors w-full sm:w-52"
                     />
                   </div>
 
-                  <select
-                    value={leadStatusFilter}
-                    onChange={(e) => setLeadStatusFilter(e.target.value)}
-                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500"
-                  >
-                    <option value="ALL">Barcha statuslar</option>
-                    <option value="Yangi">Yangi</option>
-                    <option value="Jarayonda">Jarayonda</option>
-                    <option value="Muvaffaqiyatli">Muvaffaqiyatli</option>
-                    <option value="Bekor qilingan">Bekor qilingan</option>
-                  </select>
+                  {/* Horizontal Open Status Filter Buttons */}
+                  <div className="flex items-center flex-wrap gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800/80 backdrop-blur-md shadow-inner">
+                    {[
+                      { id: 'ALL', label: 'Barcha', count: (data.leads || []).length },
+                      { id: 'Yangi', label: 'Yangi', count: (data.leads || []).filter(l => l.status === 'Yangi').length },
+                      { id: 'Jarayonda', label: 'Jarayonda', count: (data.leads || []).filter(l => l.status === 'Jarayonda').length },
+                      { id: 'Muvaffaqiyatli', label: 'Muvaffaqiyatli', count: (data.leads || []).filter(l => l.status === 'Muvaffaqiyatli').length },
+                      { id: 'Bekor qilingan', label: 'Bekor qilingan', count: (data.leads || []).filter(l => l.status === 'Bekor qilingan').length },
+                    ].map((st) => (
+                      <button
+                        key={st.id}
+                        type="button"
+                        onClick={() => setLeadStatusFilter(st.id)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                          leadStatusFilter === st.id
+                            ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-md shadow-indigo-600/30 font-bold scale-[1.02]'
+                            : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                        }`}
+                      >
+                        <span>{st.label}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${leadStatusFilter === st.id ? 'bg-white/20 text-white font-bold' : 'bg-slate-900 text-slate-500'}`}>
+                          {st.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -870,17 +876,31 @@ export const AdminDashboard = ({ onBackToSite }) => {
               {/* Partners Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {(data.partners || []).map((p) => (
-                  <div key={p.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center text-center relative group">
-                    <button
-                      onClick={() => {
-                        if (confirm("Ushbu hamkorni o'chirmoqchimisiz?")) {
-                          deletePartner(p.id);
-                        }
-                      }}
-                      className="absolute top-2 right-2 text-slate-500 hover:text-rose-400 p-1"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                  <div key={p.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center text-center relative group hover:border-slate-700 transition-all">
+                    {/* Action buttons: Edit & Delete */}
+                    <div className="absolute top-2 right-2 flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
+                      <button
+                        type="button"
+                        onClick={() => setEditingPartner({ ...p })}
+                        className="text-slate-400 hover:text-indigo-400 bg-slate-950/80 hover:bg-indigo-600/20 p-1.5 rounded-lg border border-slate-800 hover:border-indigo-500/40 transition-all cursor-pointer"
+                        title="Tahrirlash"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm("Ushbu hamkorni o'chirmoqchimisiz?")) {
+                            deletePartner(p.id);
+                          }
+                        }}
+                        className="text-slate-400 hover:text-rose-400 bg-slate-950/80 hover:bg-rose-600/20 p-1.5 rounded-lg border border-slate-800 hover:border-rose-500/40 transition-all cursor-pointer"
+                        title="O'chirish"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
                     <div className="w-full h-16 bg-slate-950 rounded-xl mb-3 flex items-center justify-center p-2">
                       <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />
                     </div>
@@ -889,6 +909,95 @@ export const AdminDashboard = ({ onBackToSite }) => {
                   </div>
                 ))}
               </div>
+
+              {/* Edit Partner Modal */}
+              {editingPartner && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+                  <div className="relative w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                      <h3 className="text-base font-bold text-white flex items-center gap-2">
+                        <Edit3 className="w-4 h-4 text-indigo-400" />
+                        <span>Hamkorni tahrirlash</span>
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => setEditingPartner(null)}
+                        className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-3.5 text-xs">
+                      <div>
+                        <label className="block text-slate-400 mb-1 font-semibold">Kompaniya nomi:</label>
+                        <input
+                          type="text"
+                          required
+                          value={editingPartner.name}
+                          onChange={(e) => setEditingPartner({ ...editingPartner, name: e.target.value })}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1 font-semibold">Sohasi (masalan: Retail & Savdo):</label>
+                        <input
+                          type="text"
+                          value={editingPartner.industryUz || ''}
+                          onChange={(e) => setEditingPartner({ ...editingPartner, industryUz: e.target.value })}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-400 mb-1 font-semibold">Logotip URL yoki SVG ma'lumoti:</label>
+                        <textarea
+                          rows={3}
+                          value={editingPartner.logo || ''}
+                          onChange={(e) => setEditingPartner({ ...editingPartner, logo: e.target.value })}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] focus:outline-none focus:border-indigo-500"
+                        />
+                      </div>
+
+                      {/* Logo Preview */}
+                      {editingPartner.logo && (
+                        <div>
+                          <span className="block text-[11px] text-slate-500 mb-1 font-mono">Logotip ko'rinishi (Preview):</span>
+                          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center h-16">
+                            <img src={editingPartner.logo} alt="Preview" className="max-h-full max-w-full object-contain" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+                      <button
+                        type="button"
+                        onClick={() => setEditingPartner(null)}
+                        className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
+                      >
+                        Bekor qilish
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          updatePartner(editingPartner.id, {
+                            name: editingPartner.name,
+                            industryUz: editingPartner.industryUz,
+                            logo: editingPartner.logo
+                          });
+                          setEditingPartner(null);
+                          showNotice("Hamkor ma'lumotlari muvaffaqiyatli yangilandi!");
+                        }}
+                        className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
+                      >
+                        Saqlash
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -1125,35 +1234,6 @@ export const AdminDashboard = ({ onBackToSite }) => {
                   </button>
                 </div>
               </form>
-            </div>
-          )}
-
-          {/* TAB: BLOG / YANGILIKLAR */}
-          {activeTab === 'blog' && (
-            <div className="space-y-6 max-w-3xl animate-fadeIn">
-              <div>
-                <h2 className="text-2xl font-bold text-white">Blog va Yangiliklar moduli</h2>
-                <p className="text-xs text-slate-400">Kelajakda maqolalar va yangiliklar bo'limini faollashtirish</p>
-              </div>
-
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="text-sm font-bold text-white">Blog modulini faollashtirish</h4>
-                    <p className="text-xs text-slate-400">Saytda yangiliklar sahifasini ochish</p>
-                  </div>
-                  <button
-                    onClick={() => updateBlog({ enabled: !data.blog?.enabled })}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      data.blog?.enabled ? 'bg-indigo-600' : 'bg-slate-700'
-                    }`}
-                  >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      data.blog?.enabled ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
-                  </button>
-                </div>
-              </div>
             </div>
           )}
         </main>

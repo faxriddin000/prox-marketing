@@ -180,7 +180,7 @@ export const ServicesPage = ({ activeCategory = 'all', onOpenConsultation }) => 
           </div>
         )}
 
-        {/* Marketing Section (7 Cards) */}
+        {/* Marketing Section (5 Cards) */}
         {(activeTab === 'all' || activeTab === 'marketing') && (
           <div className="space-y-6">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -188,13 +188,13 @@ export const ServicesPage = ({ activeCategory = 'all', onOpenConsultation }) => 
                 <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
                   <span className="w-3 h-3 rounded-full bg-indigo-500" />
                   <span>
-                    {language === 'ru' ? 'Маркетинг (7 направлений)' : "Marketing (7 ta yo'nalish)"}
+                    {language === 'ru' ? 'Маркетинг (5 направлений)' : "Marketing (5 ta yo'nalish)"}
                   </span>
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
                   {language === 'ru'
-                    ? 'Все предложения SMM, таргет, брендинг, стратегия и консалтинг, инфлюенс-маркетинг, контроль отдела продаж'
-                    : "SMM takliflari, target reklama, brending, strategiya va konsalting, blogerlar bilan ishlash, to'liq sotuv nazorati"}
+                    ? 'Все предложения SMM, таргет, брендинг, стратегия и консалтинг, инфлюенс-маркетинг'
+                    : "SMM takliflari, target reklama, brending, strategiya va konsalting, blogerlar bilan ishlash"}
                 </p>
               </div>
               <span className="text-xs font-mono font-bold text-indigo-400 hidden sm:inline">

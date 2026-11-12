@@ -26,7 +26,7 @@ export const ServicesPreview = ({ onViewChange, onSelectCategory }) => {
       id: 'marketing',
       number: '02',
       title: language === 'ru' ? 'Комплексный Маркетинг' : 'Marketing Xizmatlari',
-      badge: language === 'ru' ? '7 услуг' : '7 ta xizmat',
+      badge: language === 'ru' ? '5 услуг' : '5 ta xizmat',
       icon: BarChart3,
       borderGlow: 'hover:border-indigo-500/60 hover:shadow-indigo-500/10',
       badgeColor: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',

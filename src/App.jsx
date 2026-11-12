@@ -40,7 +40,7 @@ const AppContent = () => {
         return;
       }
 
-      if (['home', 'about', 'services', 'tariffs', 'partners', 'portfolio', 'contact'].includes(rawHash)) {
+      if (['home', 'about', 'services', 'tariffs', 'contact'].includes(rawHash)) {
         setCurrentView(rawHash);
       }
     };

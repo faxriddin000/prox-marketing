@@ -83,24 +83,6 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
                   {t('nav_tariffs')}
                 </button>
               </li>
-              <li>
-                <button
-                  onClick={() => onViewChange('partners')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  {t('nav_partners')}
-                </button>
-              </li>
-              {data.portfolio?.showInNav && (
-                <li>
-                  <button
-                    onClick={() => onViewChange('portfolio')}
-                    className="hover:text-white transition-colors cursor-pointer"
-                  >
-                    {t('nav_portfolio')}
-                  </button>
-                </li>
-              )}
             </ul>
           </div>
 

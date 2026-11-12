@@ -41,8 +41,6 @@ export const Header = ({
     { id: 'about', label: t('nav_about') },
     { id: 'services', label: t('nav_services') },
     { id: 'tariffs', label: t('nav_tariffs') },
-    { id: 'partners', label: t('nav_partners') },
-    ...(data.portfolio?.showInNav ? [{ id: 'portfolio', label: t('nav_portfolio') }] : []),
     { id: 'contact', label: t('nav_contact') },
   ];
 
