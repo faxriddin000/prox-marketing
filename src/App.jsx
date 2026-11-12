@@ -26,16 +26,40 @@ const AppContent = () => {
 
   // Handle URL hash or direct routing simulation
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'services', 'tariffs', 'partners', 'portfolio', 'contact', 'admin'].includes(hash)) {
-        setCurrentView(hash);
+    const handleRoute = () => {
+      const rawHash = window.location.hash.replace('#', '').replace(/^\//, '').toLowerCase();
+      const rawPath = window.location.pathname.replace(/^\//, '').toLowerCase();
+
+      // Secret direct paths: /admin, #/admin, #admin, /management, #/management
+      if (rawHash === 'admin' || rawHash === 'management' || rawPath === 'admin' || rawPath === 'management') {
+        if (!isAuthenticated) {
+          setAdminLoginModalOpen(true);
+        } else {
+          setCurrentView('admin');
+        }
+        return;
+      }
+
+      if (['home', 'about', 'services', 'tariffs', 'partners', 'portfolio', 'contact'].includes(rawHash)) {
+        setCurrentView(rawHash);
       }
     };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+    handleRoute();
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('popstate', handleRoute);
+    return () => {
+      window.removeEventListener('hashchange', handleRoute);
+      window.removeEventListener('popstate', handleRoute);
+    };
+  }, [isAuthenticated]);
+
+  // Reset view to home upon logout if previously in admin view
+  useEffect(() => {
+    if (!isAuthenticated && currentView === 'admin') {
+      setCurrentView('home');
+      window.location.hash = 'home';
+    }
+  }, [isAuthenticated, currentView]);
 
   const handleViewChange = (view) => {
     if (view === 'admin' && !isAuthenticated) {
@@ -135,7 +159,13 @@ const AppContent = () => {
       {/* Admin Login Modal */}
       <AdminLoginModal
         isOpen={adminLoginModalOpen}
-        onClose={() => setAdminLoginModalOpen(false)}
+        onClose={() => {
+          setAdminLoginModalOpen(false);
+          const rawHash = window.location.hash.replace('#', '').replace(/^\//, '').toLowerCase();
+          if (rawHash === 'admin' || rawHash === 'management') {
+            window.location.hash = currentView;
+          }
+        }}
         onSuccess={() => {
           setCurrentView('admin');
           window.location.hash = 'admin';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Shield, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCMS } from '../../context/CMSContext';
 import { useAuth } from '../../context/AuthContext';
@@ -107,28 +107,6 @@ export const Header = ({
                 RU
               </button>
             </div>
-
-            {/* Admin shortcut button */}
-            <button
-              onClick={() => {
-                if (isAuthenticated) {
-                  onViewChange('admin');
-                } else {
-                  onOpenAdminLogin();
-                }
-              }}
-              title="Admin Panel"
-              className={`p-2 rounded-xl text-xs font-medium border flex items-center gap-1.5 transition-all cursor-pointer ${
-                currentView === 'admin'
-                  ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 ring-1 ring-indigo-500/30'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-white border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <Shield className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="hidden xl:inline">
-                {isAuthenticated ? (currentUser?.role === 'admin' ? 'Admin' : 'Editor') : 'Admin'}
-              </span>
-            </button>
 
             {/* Free Consultation CTA */}
             <button

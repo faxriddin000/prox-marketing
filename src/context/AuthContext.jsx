@@ -27,23 +27,28 @@ export const AuthProvider = ({ children }) => {
   }, [currentUser]);
 
   const login = (username, password) => {
-    const cleanUser = username.trim().toLowerCase();
+    const cleanUser = username?.trim().toLowerCase() || '';
+    const cleanPass = password?.trim() || '';
+
+    if (!cleanPass) {
+      return { success: false, error: "❌ Parol kiritilmadi! Iltimos, parolni kiriting." };
+    }
     
-    // Check Admin
-    if ((cleanUser === 'admin' && password === 'prox2026') || (cleanUser === 'admin' && !password)) {
+    // Check Admin (Strict password required)
+    if (cleanUser === 'admin' && cleanPass === 'prox2026') {
       const user = { username: 'admin', role: 'admin', name: "Bosh Administrator" };
       setCurrentUser(user);
       return { success: true, user };
     }
     
-    // Check Editor
-    if ((cleanUser === 'editor' && password === 'editor2026') || (cleanUser === 'editor' && !password)) {
+    // Check Editor (Strict password required)
+    if (cleanUser === 'editor' && cleanPass === 'editor2026') {
       const user = { username: 'editor', role: 'editor', name: "Kontent-menejer" };
       setCurrentUser(user);
       return { success: true, user };
     }
 
-    return { success: false, error: "Login yoki parol noto'g'ri. Iltimos, qaytadan urinib ko'ring." };
+    return { success: false, error: "❌ Noto'g'ri parol! Kirish cheklangan." };
   };
 
   const loginAsDemo = (role) => {

@@ -192,11 +192,19 @@ export const Footer = ({ onViewChange, onOpenAdminLogin }) => {
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar with subtle secret double-click admin trigger */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {new Date().getFullYear()} Prox Marketing Agency. {t('footer_rights')}</p>
+          <p
+            onDoubleClick={() => onOpenAdminLogin && onOpenAdminLogin()}
+            className="cursor-default select-none"
+          >
+            © {new Date().getFullYear()} Prox Marketing Agency. {t('footer_rights')}
+          </p>
           <div className="flex items-center gap-4">
-            <span className="text-slate-400 font-mono text-[11px]">
+            <span
+              onDoubleClick={() => onOpenAdminLogin && onOpenAdminLogin()}
+              className="text-slate-400 font-mono text-[11px] cursor-default select-none"
+            >
               {t('footer_planned_domain')}
             </span>
           </div>

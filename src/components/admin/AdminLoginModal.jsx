@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Shield, X, Lock, User, CheckCircle2, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Shield, X, Lock, User, CheckCircle2, ArrowRight, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { ProxLogo } from '../common/ProxLogo';
@@ -11,17 +11,32 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  // Always reset fields to completely empty whenever the modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setUsername('');
+      setPassword('');
+      setError('');
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
+
+    if (!password || !password.trim()) {
+      setError("❌ Noto'g'ri parol!");
+      return;
+    }
+
     const res = login(username, password);
     if (res.success) {
       if (onSuccess) onSuccess();
       onClose();
     } else {
-      setError(res.error || "Login yoki parol noto'g'ri! Kirish cheklangan.");
+      setError(res.error || "❌ Noto'g'ri parol!");
       setPassword('');
     }
   };
