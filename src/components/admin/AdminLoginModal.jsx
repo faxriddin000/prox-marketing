@@ -23,17 +23,25 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setError('');
 
-    if (!username || !username.trim() || !password || !password.trim()) {
+    const cleanUser = String(username || '').trim();
+    const cleanPass = String(password || '').trim();
+
+    if (!cleanUser || !cleanPass) {
       setError("❌ Noto'g'ri login yoki parol!");
       return;
     }
 
-    const res = login(username, password);
+    const res = login(cleanUser, cleanPass);
     if (res.success) {
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        onSuccess(res.user);
+      }
       onClose();
     } else {
       setError(res.error || "❌ Noto'g'ri login yoki parol!");

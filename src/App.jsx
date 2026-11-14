@@ -29,12 +29,15 @@ const AppContent = () => {
       const rawHash = window.location.hash.replace('#', '').replace(/^\//, '').toLowerCase();
       const rawPath = window.location.pathname.replace(/^\//, '').toLowerCase();
 
+      const isAuthed = isAuthenticated || Boolean(localStorage.getItem('prox_marketing_auth_user'));
+
       // Secret direct paths: /admin, #/admin, #admin, /management, #/management
       if (rawHash === 'admin' || rawHash === 'management' || rawPath === 'admin' || rawPath === 'management') {
-        if (!isAuthenticated) {
+        if (!isAuthed) {
           setAdminLoginModalOpen(true);
         } else {
           setCurrentView('admin');
+          setAdminLoginModalOpen(false);
         }
         return;
       }
@@ -141,7 +144,17 @@ const AppContent = () => {
       />
 
       {/* Subtle Dark Glassmorphism Admin Panel Button */}
-      <FloatingAdminButton onClick={() => setAdminLoginModalOpen(true)} />
+      <FloatingAdminButton
+        onClick={() => {
+          if (isAuthenticated || Boolean(localStorage.getItem('prox_marketing_auth_user'))) {
+            setCurrentView('admin');
+            window.location.hash = 'admin';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            setAdminLoginModalOpen(true);
+          }
+        }}
+      />
 
       {/* Consultation Modal */}
       <LeadModal
@@ -153,16 +166,12 @@ const AppContent = () => {
       {/* Admin Login Modal */}
       <AdminLoginModal
         isOpen={adminLoginModalOpen}
-        onClose={() => {
-          setAdminLoginModalOpen(false);
-          const rawHash = window.location.hash.replace('#', '').replace(/^\//, '').toLowerCase();
-          if (rawHash === 'admin' || rawHash === 'management') {
-            window.location.hash = currentView;
-          }
-        }}
+        onClose={() => setAdminLoginModalOpen(false)}
         onSuccess={() => {
+          setAdminLoginModalOpen(false);
           setCurrentView('admin');
           window.location.hash = 'admin';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
       />
     </div>

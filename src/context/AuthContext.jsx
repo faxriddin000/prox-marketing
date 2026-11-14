@@ -27,28 +27,38 @@ export const AuthProvider = ({ children }) => {
   }, [currentUser]);
 
   const login = (username, password) => {
-    const cleanUser = username?.trim().toLowerCase() || '';
-    const cleanPass = password?.trim() || '';
+    const cleanUser = String(username || '').trim().toLowerCase();
+    const cleanPass = String(password || '').trim();
 
-    if (!cleanPass) {
-      return { success: false, error: "❌ Parol kiritilmadi! Iltimos, parolni kiriting." };
+    if (!cleanUser || !cleanPass) {
+      return { success: false, error: "❌ Login va parolni to'liq kiriting!" };
     }
     
-    // Check Admin (Strict password required)
+    // Check Admin (Strict credentials verification)
     if (cleanUser === 'admin' && cleanPass === 'prox2026') {
       const user = { username: 'admin', role: 'admin', name: "Bosh Administrator" };
+      try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+      } catch (e) {
+        console.error(e);
+      }
       setCurrentUser(user);
       return { success: true, user };
     }
     
-    // Check Editor (Strict password required)
+    // Check Editor (Strict credentials verification)
     if (cleanUser === 'editor' && cleanPass === 'editor2026') {
       const user = { username: 'editor', role: 'editor', name: "Kontent-menejer" };
+      try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+      } catch (e) {
+        console.error(e);
+      }
       setCurrentUser(user);
       return { success: true, user };
     }
 
-    return { success: false, error: "❌ Noto'g'ri parol! Kirish cheklangan." };
+    return { success: false, error: "❌ Noto'g'ri login yoki parol!" };
   };
 
   const loginAsDemo = (role) => {
@@ -64,6 +74,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    try {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    } catch (e) {
+      console.error(e);
+    }
     setCurrentUser(null);
   };
 

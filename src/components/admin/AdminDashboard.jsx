@@ -209,7 +209,10 @@ export const AdminDashboard = ({ onBackToSite }) => {
           </button>
 
           <button
-            onClick={logout}
+            onClick={() => {
+              logout();
+              if (onBackToSite) onBackToSite();
+            }}
             className="text-xs text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
             title="Chiqish"
           >
