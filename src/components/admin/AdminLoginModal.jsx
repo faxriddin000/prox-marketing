@@ -26,8 +26,8 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
     e.preventDefault();
     setError('');
 
-    if (!password || !password.trim()) {
-      setError("❌ Noto'g'ri parol!");
+    if (!username || !username.trim() || !password || !password.trim()) {
+      setError("❌ Noto'g'ri login yoki parol!");
       return;
     }
 
@@ -36,7 +36,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
       if (onSuccess) onSuccess();
       onClose();
     } else {
-      setError(res.error || "❌ Noto'g'ri parol!");
+      setError(res.error || "❌ Noto'g'ri login yoki parol!");
       setPassword('');
     }
   };
@@ -73,7 +73,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-slate-300 mb-1">
               Login:
@@ -83,6 +83,8 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
               <input
                 type="text"
                 required
+                autoComplete="off"
+                name="auth_username_field"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Foydalanuvchi nomi"
@@ -100,6 +102,8 @@ export const AdminLoginModal = ({ isOpen, onClose, onSuccess }) => {
               <input
                 type="password"
                 required
+                autoComplete="new-password"
+                name="auth_password_field"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"

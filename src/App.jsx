@@ -5,7 +5,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
 import { LeadModal } from './components/common/LeadModal';
-import { FloatingChatWidget } from './components/common/FloatingChatWidget';
+import { FloatingAdminButton } from './components/common/FloatingAdminButton';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { HomePage } from './components/home/HomePage';
@@ -140,8 +140,8 @@ const AppContent = () => {
         onOpenAdminLogin={() => setAdminLoginModalOpen(true)}
       />
 
-      {/* Floating Chat / Telegram Support Widget */}
-      <FloatingChatWidget />
+      {/* Subtle Dark Glassmorphism Admin Panel Button */}
+      <FloatingAdminButton onClick={() => setAdminLoginModalOpen(true)} />
 
       {/* Consultation Modal */}
       <LeadModal
