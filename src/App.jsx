@@ -13,7 +13,6 @@ import { AboutPage } from './components/about/AboutPage';
 import { ServicesPage } from './components/services/ServicesPage';
 import { PricingPage } from './components/pricing/PricingPage';
 import { PartnersPage } from './components/partners/PartnersPage';
-import { PortfolioPage } from './components/portfolio/PortfolioPage';
 import { ContactPage } from './components/contact/ContactPage';
 
 const AppContent = () => {
@@ -127,11 +126,6 @@ const AppContent = () => {
         )}
         {currentView === 'partners' && (
           <PartnersPage
-            onOpenConsultation={handleOpenConsultation}
-          />
-        )}
-        {currentView === 'portfolio' && (
-          <PortfolioPage
             onOpenConsultation={handleOpenConsultation}
           />
         )}
